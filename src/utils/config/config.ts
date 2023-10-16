@@ -2,7 +2,7 @@ import dotenv from "dotenv";
 import path from "path";
 
 // Parsing the env file.
-dotenv.config({ path: path.resolve(__dirname, "../../.env") });
+dotenv.config({ path: path.resolve(__dirname, "../../../.env") });
 
 // Env types
 interface ENV {
@@ -27,7 +27,7 @@ const getConfig = (): ENV => {
   return {
     PORT: process.env.PORT ? Number(process.env.PORT) : 9005,
     JWT_SECRET_ADMIN: process.env.JWT_SECRET_ADMIN,
-    JWT_SECRET_USER: process.env.JWT_SECRET_MEMBER,
+    JWT_SECRET_USER: process.env.JWT_SECRET_USER,
     EMAIL_SEND_EMAIL_ID: process.env.EMAIL_SEND_EMAIL_ID,
     EMAIL_SEND_PASSWORD: process.env.EMAIL_SEND_PASSWORD,
   };

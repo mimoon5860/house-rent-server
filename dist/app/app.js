@@ -36,7 +36,7 @@ class App {
     // init routers
     initRouters() {
         this.app.get("/", (_req, res) => {
-            res.send(`Toab server is running...🚀`);
+            res.send(`Server is running...🚀`);
         });
         this.app.use("/api/v1", new router_1.default().v1Router);
     }
