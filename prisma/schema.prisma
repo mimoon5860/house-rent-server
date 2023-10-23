@@ -1,5 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
   provider = "prisma-client-js"
@@ -99,15 +97,16 @@ model Member{
   areaId Int
   user User  @relation(fields: [userId], references: [id])
   area Area @relation(fields: [areaId], references: [id])
+  property Property[]
 }
 
 model Property{
     id Int @id @default(autoincrement())
+    memberId Int
     title String
     createdAt DateTime @default(now())
     shortAddress String
     areaId Int
-    area Area  @relation(fields: [areaId], references: [id])  
     summary String @db.Text
     availableFrom DateTime @db.Date
     isDeleted Boolean @default(false)
@@ -116,6 +115,8 @@ model Property{
     basicInfo PropertyBasicAttributeValue[]
     price Float
     priceFor PriceForEnum
+    area Area  @relation(fields: [areaId], references: [id])  
+    member Member @relation(fields: [memberId], references: [id])
     includedPrice PriceIncluded[]
     excludedPrice PriceExcluded[]
     contents PropertyContent[]
