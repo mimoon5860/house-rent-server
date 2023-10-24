@@ -64,13 +64,14 @@ model User{
     id Int @id @default(autoincrement())
     userName String @unique
     email String
+    password String
     mobileNumber String
     firstName String
     lastName String
-    photo String
+    photo String?
     isVerified Boolean @default(false)
     createdAt DateTime @default(now())
-    status PropertyStatusEnum @default(Active)
+    status StatusEnum @default(Active)
     admin Admin?
     member Member?
     type UserType[]
@@ -94,9 +95,9 @@ model Member{
   id Int @id @default(autoincrement())
   userId Int @unique
   address String?
-  areaId Int
+  areaId Int?
   user User  @relation(fields: [userId], references: [id])
-  area Area @relation(fields: [areaId], references: [id])
+  area Area? @relation(fields: [areaId], references: [id])
   property Property[]
 }
 
@@ -110,7 +111,7 @@ model Property{
     summary String @db.Text
     availableFrom DateTime @db.Date
     isDeleted Boolean @default(false)
-    status StatusEnum @default(Active)
+    status PropertyStatusEnum @default(Active)
     category CategoryEnum 
     basicInfo PropertyBasicAttributeValue[]
     price Float

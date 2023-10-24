@@ -12,6 +12,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const client_1 = __importDefault(require("../app/client"));
+const rootModels_1 = __importDefault(require("../models/rootModels"));
 const manageFile_1 = __importDefault(require("../utils/lib/manageFile"));
 const responseMessage_1 = __importDefault(require("../utils/miscellaneous/responseMessage"));
 const statusCode_1 = __importDefault(require("../utils/miscellaneous/statusCode"));
@@ -20,6 +22,8 @@ class AbstractServices {
         this.manageFile = new manageFile_1.default();
         this.ResMsg = responseMessage_1.default;
         this.StatusCode = statusCode_1.default;
+        this.prisma = client_1.default;
+        this.Models = new rootModels_1.default(client_1.default);
     }
     // insert exception error
     createException(endPoint = null, exceptionText = null, errorMsg = null, lineNumber = null) {
