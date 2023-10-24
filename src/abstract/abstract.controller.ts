@@ -8,7 +8,9 @@ abstract class AbstractController {
   constructor() {
     this.asyncWrapper = new Wrapper();
   }
+
   protected StatusCode = StatusCode;
+
   protected error(message?: string, status?: number, type?: string) {
     throw new CustomError(
       message || ResMsg.HTTP_INTERNAL_SERVER_ERROR,

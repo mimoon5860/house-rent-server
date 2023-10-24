@@ -61,11 +61,13 @@ class UserModel {
 
     return await this.client.member.findFirst({
       select: {
+        id: true,
         user: {
           select: {
             id: true,
             isVerified: true,
             email: true,
+            password: true,
             type: {
               select: {
                 id: true,

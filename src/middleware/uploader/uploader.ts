@@ -67,7 +67,7 @@ class Uploader {
   public localUploadRaw(folder: string, types: string[] = allowAllFileTypes) {
     return (req: Request, _res: Response, next: NextFunction): void => {
       req.upFiles = [];
-      const uploadsFolder = `${__dirname}/../../../${rootFileFolder}/${folder}`;
+      const uploadsFolder = `${__dirname}/../../../${rootFileFolder}`;
 
       const storage = multer.diskStorage({
         destination: (_req, _file, cb) => {

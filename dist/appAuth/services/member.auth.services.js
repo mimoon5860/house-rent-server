@@ -14,6 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const abstract_service_1 = __importDefault(require("../../abstract/abstract.service"));
 const lib_1 = __importDefault(require("../../utils/lib/lib"));
+const config_1 = __importDefault(require("../../utils/config/config"));
 class MemberAuthServices extends abstract_service_1.default {
     constructor() {
         super();
@@ -23,7 +24,7 @@ class MemberAuthServices extends abstract_service_1.default {
         return __awaiter(this, void 0, void 0, function* () {
             return yield this.prisma.$transaction((tx) => __awaiter(this, void 0, void 0, function* () {
                 const userModel = this.Models.userModel(tx);
-                const { email, password, firstName, lastName, mobileNumber, address, areaId, } = req.body;
+                const { email, password, firstName, lastName, mobileNumber } = req.body;
                 const userMember = yield userModel.getUserMember({ email });
                 if (userMember) {
                     return {
@@ -49,7 +50,64 @@ class MemberAuthServices extends abstract_service_1.default {
                     photo,
                 });
                 const newMember = yield userModel.insertMember({ userId: newUser.id });
+                const tokenData = {
+                    userId: newUser.id,
+                    memberId: newMember.id,
+                    userName,
+                    email,
+                    firstName,
+                    lastName,
+                    photo,
+                };
+                const token = lib_1.default.createToken(tokenData, config_1.default.JWT_SECRET_USER, "72h");
+                return {
+                    success: true,
+                    message: "Registration successful",
+                    code: this.StatusCode.HTTP_SUCCESSFUL,
+                    token,
+                };
             }));
+        });
+    }
+    // login member service
+    loginMember(req) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const { email, password } = req.body;
+            const userModel = this.Models.userModel();
+            const member = yield userModel.getUserMember({ email });
+            if (!member) {
+                return {
+                    success: false,
+                    message: this.ResMsg.WRONG_CREDENTIALS,
+                    code: this.StatusCode.HTTP_UNAUTHORIZED,
+                };
+            }
+            const { user, id: memberId } = member;
+            const { password: hashedPass, id: userId, firstName, lastName, photo, } = user;
+            const match = yield lib_1.default.compare(password, hashedPass);
+            if (!match) {
+                return {
+                    success: false,
+                    message: this.ResMsg.WRONG_CREDENTIALS,
+                    code: this.StatusCode.HTTP_UNAUTHORIZED,
+                };
+            }
+            const tokenData = {
+                userId,
+                memberId,
+                userName: user.userName,
+                email,
+                firstName,
+                lastName,
+                photo,
+            };
+            const token = lib_1.default.createToken(tokenData, config_1.default.JWT_SECRET_USER, "72h");
+            return {
+                success: true,
+                message: "Login successful",
+                token,
+                code: this.StatusCode.HTTP_SUCCESSFUL,
+            };
         });
     }
 }
