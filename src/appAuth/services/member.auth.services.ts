@@ -45,6 +45,8 @@ class MemberAuthServices extends AbstractServices {
         photo,
       });
 
+      await userModel.insertUserType({ userId: newUser.id });
+
       const newMember = await userModel.insertMember({ userId: newUser.id });
 
       const tokenData = {

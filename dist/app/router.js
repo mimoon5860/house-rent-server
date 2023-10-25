@@ -4,16 +4,22 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
-const authRouter_1 = __importDefault(require("../appAuth/authRouter"));
+const memberRoot_router_1 = __importDefault(require("../appMember/memberRoot.router"));
+const authRoot_router_1 = __importDefault(require("../appAuth/authRoot.router"));
+const authChecker_1 = __importDefault(require("../middleware/authChecker/authChecker"));
 class RootRouter {
     constructor() {
         this.v1Router = (0, express_1.Router)();
-        this.authRouter = new authRouter_1.default();
+        this.authRouter = new authRoot_router_1.default();
+        this.memberRouter = new memberRoot_router_1.default();
+        this.authChecker = new authChecker_1.default();
         this.callV1Router();
     }
     callV1Router() {
         // auth router for member, admin, trainee
-        this.v1Router.use("/auth", this.authRouter.AuthRouter);
+        this.v1Router.use("/auth", this.authRouter.router);
+        // member router
+        this.v1Router.use("/member", this.authChecker.memberAuthChecker, this.memberRouter.router);
     }
 }
 exports.default = RootRouter;

@@ -40,6 +40,7 @@ class App {
     this.app.get("/", (_req: Request, res: Response) => {
       res.send(`Server is running...🚀`);
     });
+
     this.app.use("/api/v1", new RootRouter().v1Router);
   }
 

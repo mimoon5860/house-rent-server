@@ -1,9 +1,11 @@
 export interface IUser {
-  id: number;
-  name: string;
-  type: string;
-  photo: string;
-  status: boolean;
+  userId: number;
+  memberId: number;
+  email: string;
+  userName: string;
+  firstName: string;
+  lastName: string;
+  photo: string | null;
 }
 export interface IAdmin {
   id: number;

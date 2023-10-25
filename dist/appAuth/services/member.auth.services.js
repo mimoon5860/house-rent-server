@@ -49,6 +49,7 @@ class MemberAuthServices extends abstract_service_1.default {
                     userName,
                     photo,
                 });
+                yield userModel.insertUserType({ userId: newUser.id });
                 const newMember = yield userModel.insertMember({ userId: newUser.id });
                 const tokenData = {
                     userId: newUser.id,

@@ -4,6 +4,7 @@ import {
   IGetUserMemberWhere,
   IInsertMember,
   IInsertUserParams,
+  IInsertUserTypeParams,
 } from "../../utils/interfaces/userTypes";
 
 class UserModel {
@@ -24,6 +25,11 @@ class UserModel {
     return await this.client.member.create({
       data: params,
     });
+  }
+
+  // insert user type
+  public async insertUserType(params: IInsertUserTypeParams) {
+    return await this.client.userType.create({ data: params });
   }
 
   // get user member

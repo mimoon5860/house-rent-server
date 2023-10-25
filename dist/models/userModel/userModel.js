@@ -29,6 +29,12 @@ class UserModel {
             });
         });
     }
+    // insert user type
+    insertUserType(params) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return yield this.client.userType.create({ data: params });
+        });
+    }
     // get user member
     getUserMember(params) {
         return __awaiter(this, void 0, void 0, function* () {

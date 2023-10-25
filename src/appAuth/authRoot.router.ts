@@ -1,16 +1,17 @@
-import { Router } from "express";
 import MemberAuthRouter from "./routers/member.auth.router";
+import { Router } from "express";
 
-class AuthRouter {
-  public AuthRouter = Router();
+class AuthRootRouter {
+  public router = Router();
   private memberAuthRouter = new MemberAuthRouter();
+
   constructor() {
     this.callRouter();
   }
 
   private callRouter() {
-    this.AuthRouter.use("/member", this.memberAuthRouter.router);
+    this.router.use("/member", this.memberAuthRouter.router);
   }
 }
 
-export default AuthRouter;
+export default AuthRootRouter;

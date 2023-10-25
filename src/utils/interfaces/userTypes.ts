@@ -8,6 +8,11 @@ export interface IInsertUserParams {
   photo?: string | null;
 }
 
+export interface IInsertUserTypeParams {
+  userId: number;
+  userType?: "MEMBER" | "ADMIN";
+}
+
 export interface IInsertMember {
   userId: number;
 }

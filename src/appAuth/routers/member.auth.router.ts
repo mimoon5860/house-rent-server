@@ -3,6 +3,7 @@ import MemberAuthController from "../controllers/member.auth.controller";
 
 class MemberAuthRouter extends AbstractRouter {
   private controller = new MemberAuthController();
+
   constructor() {
     super();
     this.callRouter();
