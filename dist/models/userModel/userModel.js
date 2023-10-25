@@ -72,12 +72,6 @@ class UserModel {
                             isVerified: true,
                             email: true,
                             password: true,
-                            type: {
-                                select: {
-                                    id: true,
-                                    userType: true,
-                                },
-                            },
                             userName: true,
                             firstName: true,
                             lastName: true,
@@ -116,6 +110,10 @@ class UserModel {
                 where,
             });
         });
+    }
+    // get user admin
+    getUserAdmin() {
+        return __awaiter(this, void 0, void 0, function* () { });
     }
 }
 exports.default = UserModel;

@@ -74,12 +74,6 @@ class UserModel {
             isVerified: true,
             email: true,
             password: true,
-            type: {
-              select: {
-                id: true,
-                userType: true,
-              },
-            },
             userName: true,
             firstName: true,
             lastName: true,
@@ -120,5 +114,6 @@ class UserModel {
   }
 
   // get user admin
+  public async getUserAdmin() {}
 }
 export default UserModel;

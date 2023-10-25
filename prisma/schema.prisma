@@ -113,11 +113,11 @@ model Property{
     isDeleted Boolean @default(false)
     status PropertyStatusEnum @default(Active)
     category CategoryEnum 
-    basicInfo PropertyBasicAttributeValue[]
     price Float
     priceFor PriceForEnum
     area Area  @relation(fields: [areaId], references: [id])  
     member Member @relation(fields: [memberId], references: [id])
+    basicInfo PropertyBasicAttributeValue[]
     includedPrice PriceIncluded[]
     excludedPrice PriceExcluded[]
     contents PropertyContent[]
