@@ -1,9 +1,10 @@
 import request from "supertest";
-import app from "../../../index";
-import StatusCodeTest from "../../utils/statusCode";
+import StatusCodeTest from "../../utils/miscellaneous/statusCode";
 import AuthFakeData from "../../utils/fakeData/authFakeData/authFakeData";
+import getApp from "../../config";
 
 const fake = new AuthFakeData();
+const app = getApp();
 
 // Member auth api test
 describe("Member Auth Api Test", () => {

@@ -9,12 +9,13 @@
       "/jspm_packages",
       "/src/"
     ],
-    "forceExit": true
+    "forceExit": true,
+    "verbose": true
   },
   "scripts": {
     "test": "jest",
-    "dev": "nodemon dist/index.js",
-    "start": "node dist/index.js"
+    "dev": "nodemon dist/server.js",
+    "start": "node dist/server.js"
   },
   "author": "",
   "license": "ISC",

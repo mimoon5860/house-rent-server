@@ -3,10 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const app_1 = __importDefault(require("../app/app"));
-const app = new app_1.default(8000);
-// app.startServer();
-const getApp = () => {
-    return app.app;
-};
-exports.default = getApp;
+const app_1 = __importDefault(require("./app/app"));
+const config_1 = __importDefault(require("./utils/config/config"));
+const app = new app_1.default(config_1.default.PORT);
+exports.default = app.app;

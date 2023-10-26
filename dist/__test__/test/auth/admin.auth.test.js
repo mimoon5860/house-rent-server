@@ -13,15 +13,15 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const supertest_1 = __importDefault(require("supertest"));
+const config_1 = __importDefault(require("../../config"));
 const statusCode_1 = __importDefault(require("../../utils/miscellaneous/statusCode"));
 const authFakeData_1 = __importDefault(require("../../utils/fakeData/authFakeData/authFakeData"));
-const config_1 = __importDefault(require("../../config"));
 const fake = new authFakeData_1.default();
 const app = (0, config_1.default)();
 // Member auth api test
-describe("Member Auth Api Test", () => {
+describe("Admin Auth Api Test", () => {
     describe("POST /api/v1/auth/member/login", () => {
-        test("BEST CASE: Login successful!", () => __awaiter(void 0, void 0, void 0, function* () {
+        it("BEST CASE: Login successful!", () => __awaiter(void 0, void 0, void 0, function* () {
             yield (0, supertest_1.default)(app)
                 .post("/api/v1/auth/member/login")
                 .send(fake.memberLoginBestCase)
