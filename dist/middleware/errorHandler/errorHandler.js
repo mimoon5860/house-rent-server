@@ -25,24 +25,20 @@ class ErrorHandler {
             if (files.length) {
                 yield this.manageFile.deleteFromLocal(files);
             }
-            console.log({ err });
             if (err instanceof customEror_1.default) {
                 this.customError.message =
                     err.message || "Something went wrong, please try again later!";
-                this.customError.type = err.type;
                 this.customError.status = err.status;
             }
             else {
                 this.customError.message =
                     "Something went wrong, please try again later!";
-                this.customError.type = "Internal Server Error";
             }
             res.status(this.customError.status || 500).json(this.customError);
         });
         this.customError = {
             success: false,
             message: "Something went wrong :( please try again later!!",
-            type: "Internal server error!",
         };
         this.manageFile = new manageFile_1.default();
     }

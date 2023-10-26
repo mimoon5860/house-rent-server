@@ -25,12 +25,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const abstract_controller_1 = __importDefault(require("../../abstract/abstract.controller"));
 const member_auth_services_1 = __importDefault(require("../services/member.auth.services"));
+const auth_validator_1 = __importDefault(require("../utils/validator/auth.validator"));
 class MemberAuthController extends abstract_controller_1.default {
     constructor() {
         super();
         this.services = new member_auth_services_1.default();
+        this.validator = new auth_validator_1.default();
         // registration controller
-        this.registrationController = this.asyncWrapper.wrap((req, res) => __awaiter(this, void 0, void 0, function* () {
+        this.registrationController = this.asyncWrapper.wrap(this.validator.registrationValidatorSchema, (req, res) => __awaiter(this, void 0, void 0, function* () {
             const _a = yield this.services.registerMember(req), { code } = _a, rest = __rest(_a, ["code"]);
             if (rest.success) {
                 res.status(code).json(rest);
@@ -40,7 +42,7 @@ class MemberAuthController extends abstract_controller_1.default {
             }
         }));
         // login controller
-        this.loginController = this.asyncWrapper.wrap((req, res) => __awaiter(this, void 0, void 0, function* () {
+        this.loginController = this.asyncWrapper.wrap(this.validator.loginValidatorSchema, (req, res) => __awaiter(this, void 0, void 0, function* () {
             const _b = yield this.services.loginMember(req), { code } = _b, rest = __rest(_b, ["code"]);
             res.status(code).json(rest);
         }));

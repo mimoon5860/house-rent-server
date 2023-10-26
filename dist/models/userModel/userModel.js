@@ -45,6 +45,9 @@ class UserModel {
                     },
                 },
             };
+            if (params.email) {
+                where.user.email = params.email;
+            }
             if (params.memberId) {
                 where.id = params.memberId;
             }

@@ -30,7 +30,7 @@ class MemberController extends abstract_controller_1.default {
         super();
         this.services = new member_services_1.default();
         // get profile
-        this.getProfile = this.asyncWrapper.wrap((req, res) => __awaiter(this, void 0, void 0, function* () {
+        this.getProfile = this.asyncWrapper.wrap(null, (req, res) => __awaiter(this, void 0, void 0, function* () {
             const _a = yield this.services.getProfile(req), { code } = _a, rest = __rest(_a, ["code"]);
             res.status(code).json(rest);
         }));

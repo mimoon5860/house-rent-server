@@ -10,6 +10,7 @@ class MemberController extends AbstractController {
 
   // get profile
   public getProfile = this.asyncWrapper.wrap(
+    null,
     async (req: Request, res: Response) => {
       const { code, ...rest } = await this.services.getProfile(req);
       res.status(code).json(rest);

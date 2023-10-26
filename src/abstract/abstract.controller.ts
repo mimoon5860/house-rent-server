@@ -11,11 +11,10 @@ abstract class AbstractController {
 
   protected StatusCode = StatusCode;
 
-  protected error(message?: string, status?: number, type?: string) {
+  protected error(message?: string, status?: number) {
     throw new CustomError(
       message || ResMsg.HTTP_INTERNAL_SERVER_ERROR,
-      status || StatusCode.HTTP_INTERNAL_SERVER_ERROR,
-      type || "Internal server Error"
+      status || StatusCode.HTTP_INTERNAL_SERVER_ERROR
     );
   }
 }

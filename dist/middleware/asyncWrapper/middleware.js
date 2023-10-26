@@ -12,30 +12,27 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const express_validator_1 = require("express-validator");
 const abstract_service_1 = __importDefault(require("../../abstract/abstract.service"));
 const customEror_1 = __importDefault(require("../../utils/lib/customEror"));
-const validationError_1 = __importDefault(require("../../utils/lib/validationError"));
 class Wrapper extends abstract_service_1.default {
     // CONTROLLER ASYNCWRAPPER
-    wrap(cb) {
+    wrap(schema, cb) {
         return (req, res, next) => __awaiter(this, void 0, void 0, function* () {
             try {
-                const errors = (0, express_validator_1.validationResult)(req);
-                // throw error if there are any invalid inputs
-                console.log(errors.array());
-                if (!errors.isEmpty()) {
-                    throw new validationError_1.default(errors);
+                if (schema) {
+                    const value = yield schema.validateAsync(req.body);
+                    req.body = value;
                 }
                 yield cb(req, res, next);
             }
             catch (err) {
-                // console.log({ err }, 'error');
-                console.error("Error details:", err.detail);
-                console.error("Error line:", err.line);
-                console.error("Error stack:", err.stack);
-                yield this.createException(req.baseUrl, "Error from async wrapper", err.message, err.line);
-                next(new customEror_1.default(err.message, err.status, err.type));
+                if (err.isJoi) {
+                    next(new customEror_1.default(err.message, this.StatusCode.HTTP_UNPROCESSABLE_ENTITY));
+                }
+                else {
+                    yield this.createException(req.baseUrl, "Error from async wrapper", err.message, err.line);
+                    next(new customEror_1.default(err.message, err.status));
+                }
             }
         });
     }

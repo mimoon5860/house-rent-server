@@ -43,7 +43,7 @@ class App {
     // not found router
     notFoundRouter() {
         this.app.use("*", (_req, _res, next) => {
-            next(new customEror_1.default("Cannot found the route", 404, "Invalid route"));
+            next(new customEror_1.default("Cannot found the route", 404));
         });
     }
     // error handler

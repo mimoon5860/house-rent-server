@@ -12,8 +12,8 @@ class AbstractController {
         this.StatusCode = statusCode_1.default;
         this.asyncWrapper = new middleware_1.default();
     }
-    error(message, status, type) {
-        throw new customEror_1.default(message || responseMessage_1.default.HTTP_INTERNAL_SERVER_ERROR, status || statusCode_1.default.HTTP_INTERNAL_SERVER_ERROR, type || "Internal server Error");
+    error(message, status) {
+        throw new customEror_1.default(message || responseMessage_1.default.HTTP_INTERNAL_SERVER_ERROR, status || statusCode_1.default.HTTP_INTERNAL_SERVER_ERROR);
     }
 }
 exports.default = AbstractController;

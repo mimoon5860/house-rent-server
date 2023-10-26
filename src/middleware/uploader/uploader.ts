@@ -105,7 +105,7 @@ class Uploader {
       upload.any()(req, _res, (err) => {
         if (err) {
           console.log({ err });
-          next(new CustomError(err.message, 400, "File upload failed!"));
+          next(new CustomError(err.message, 400));
         } else {
           next();
         }
