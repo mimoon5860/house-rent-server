@@ -19,4 +19,4 @@ exports.allowAllFileTypes = [
     "image/gif",
 ];
 // files folder name
-exports.rootFileFolder = "assets";
+exports.rootFileFolder = "uploads";

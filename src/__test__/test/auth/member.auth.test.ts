@@ -8,6 +8,7 @@ const app = getApp();
 
 // Member auth api test
 describe("Member Auth Api Test", () => {
+  // Member login cases
   describe("POST /api/v1/auth/member/login", () => {
     test("BEST CASE: Login successful!", async () => {
       await request(app)
@@ -31,6 +32,17 @@ describe("Member Auth Api Test", () => {
         .send(fake.loginInvalidPass)
         .set("Accept", "application/json")
         .expect(StatusCodeTest.HTTP_UNAUTHORIZED);
+    });
+  });
+
+  // Member registration cases
+  describe("POST /api/v1/auth/member/register", () => {
+    test("BEST CASE: Registration successful!", async () => {
+      await request(app)
+        .post("/api/v1/auth/member/login")
+        .send(fake.memberLoginBestCase)
+        .set("Accept", "application/json")
+        .expect(StatusCodeTest.HTTP_SUCCESSFUL);
     });
   });
 });

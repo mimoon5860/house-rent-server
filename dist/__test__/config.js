@@ -5,7 +5,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const app_1 = __importDefault(require("../app/app"));
 const app = new app_1.default(8000);
-// app.startServer();
 const getApp = () => {
     return app.app;
 };

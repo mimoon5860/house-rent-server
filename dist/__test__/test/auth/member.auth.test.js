@@ -20,6 +20,7 @@ const fake = new authFakeData_1.default();
 const app = (0, config_1.default)();
 // Member auth api test
 describe("Member Auth Api Test", () => {
+    // Member login cases
     describe("POST /api/v1/auth/member/login", () => {
         test("BEST CASE: Login successful!", () => __awaiter(void 0, void 0, void 0, function* () {
             yield (0, supertest_1.default)(app)
@@ -41,6 +42,16 @@ describe("Member Auth Api Test", () => {
                 .send(fake.loginInvalidPass)
                 .set("Accept", "application/json")
                 .expect(statusCode_1.default.HTTP_UNAUTHORIZED);
+        }));
+    });
+    // Member registration cases
+    describe("POST /api/v1/auth/member/register", () => {
+        test("BEST CASE: Registration successful!", () => __awaiter(void 0, void 0, void 0, function* () {
+            yield (0, supertest_1.default)(app)
+                .post("/api/v1/auth/member/login")
+                .send(fake.memberLoginBestCase)
+                .set("Accept", "application/json")
+                .expect(statusCode_1.default.HTTP_SUCCESSFUL);
         }));
     });
 });

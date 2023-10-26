@@ -17,4 +17,4 @@ export const allowAllFileTypes: string[] = [
 ];
 
 // files folder name
-export const rootFileFolder = "assets";
+export const rootFileFolder = "uploads";
