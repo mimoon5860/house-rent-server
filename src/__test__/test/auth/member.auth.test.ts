@@ -14,7 +14,6 @@ describe("Member Auth Api Test", () => {
       await request(app)
         .post("/api/v1/auth/member/login")
         .send(fake.memberLoginBestCase)
-        .set("Accept", "application/json")
         .expect(StatusCodeTest.HTTP_SUCCESSFUL);
     });
 
@@ -22,7 +21,6 @@ describe("Member Auth Api Test", () => {
       await request(app)
         .post("/api/v1/auth/member/login")
         .send(fake.loginInvalidEntity)
-        .set("Accept", "application/json")
         .expect(StatusCodeTest.HTTP_UNPROCESSABLE_ENTITY);
     });
 
@@ -30,7 +28,6 @@ describe("Member Auth Api Test", () => {
       await request(app)
         .post("/api/v1/auth/member/login")
         .send(fake.loginInvalidPass)
-        .set("Accept", "application/json")
         .expect(StatusCodeTest.HTTP_UNAUTHORIZED);
     });
   });
@@ -38,11 +35,13 @@ describe("Member Auth Api Test", () => {
   // Member registration cases
   describe("POST /api/v1/auth/member/register", () => {
     test("BEST CASE: Registration successful!", async () => {
-      await request(app)
-        .post("/api/v1/auth/member/login")
-        .send(fake.memberLoginBestCase)
-        .set("Accept", "application/json")
+      const res = await request(app)
+        .post("/api/v1/auth/member/register")
+        .field(fake.memberRegistrationBestCase)
+        .attach("photo", `${__dirname}/../../../test-assets/test.png`)
         .expect(StatusCodeTest.HTTP_SUCCESSFUL);
+
+      console.log(res);
     });
   });
 });

@@ -26,32 +26,30 @@ describe("Member Auth Api Test", () => {
             yield (0, supertest_1.default)(app)
                 .post("/api/v1/auth/member/login")
                 .send(fake.memberLoginBestCase)
-                .set("Accept", "application/json")
                 .expect(statusCode_1.default.HTTP_SUCCESSFUL);
         }));
         test("WORST CASE: Unprocessable Entity", () => __awaiter(void 0, void 0, void 0, function* () {
             yield (0, supertest_1.default)(app)
                 .post("/api/v1/auth/member/login")
                 .send(fake.loginInvalidEntity)
-                .set("Accept", "application/json")
                 .expect(statusCode_1.default.HTTP_UNPROCESSABLE_ENTITY);
         }));
         test("WORST CASE: Invalid password", () => __awaiter(void 0, void 0, void 0, function* () {
             yield (0, supertest_1.default)(app)
                 .post("/api/v1/auth/member/login")
                 .send(fake.loginInvalidPass)
-                .set("Accept", "application/json")
                 .expect(statusCode_1.default.HTTP_UNAUTHORIZED);
         }));
     });
     // Member registration cases
     describe("POST /api/v1/auth/member/register", () => {
         test("BEST CASE: Registration successful!", () => __awaiter(void 0, void 0, void 0, function* () {
-            yield (0, supertest_1.default)(app)
-                .post("/api/v1/auth/member/login")
-                .send(fake.memberLoginBestCase)
-                .set("Accept", "application/json")
+            const res = yield (0, supertest_1.default)(app)
+                .post("/api/v1/auth/member/register")
+                .field(fake.memberRegistrationBestCase)
+                .attach("photo", `${__dirname}/../../../test-assets/test.png`)
                 .expect(statusCode_1.default.HTTP_SUCCESSFUL);
+            console.log(res);
         }));
     });
 });
