@@ -29,9 +29,11 @@ class PropertyModel {
         });
     }
     // get property basic attributes
-    getBasicAttribute() {
+    getBasicAttribute(params) {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield this.client.propertyBasicAttribute.findMany();
+            return yield this.client.propertyBasicAttribute.findMany({
+                where: params,
+            });
         });
     }
     // insert price included

@@ -150,7 +150,7 @@ model PriceExcluded{
 
 model PropertyBasicAttribute{
    id Int @id @default(autoincrement())
-   attributeName String
+   attributeName String @unique
    attributeValues PropertyBasicAttributeValue[]
 }
 

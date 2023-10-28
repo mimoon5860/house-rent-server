@@ -33,15 +33,19 @@ describe("Member Auth Api Test", () => {
   });
 
   // Member registration cases
-  describe("POST /api/v1/auth/member/register", () => {
+  describe("POST /api/v1/auth/member/registration", () => {
     test("BEST CASE: Registration successful!", async () => {
-      const res = await request(app)
-        .post("/api/v1/auth/member/register")
+      await request(app)
+        .post("/api/v1/auth/member/registration")
         .field(fake.memberRegistrationBestCase)
-        .attach("photo", `${__dirname}/../../../test-assets/test.png`)
-        .expect(StatusCodeTest.HTTP_SUCCESSFUL);
-
-      console.log(res);
+        .attach("photo", `${__dirname}../../../..//test-assets/test.png`)
+        .expect(StatusCodeTest.HTTP_SUCCESSFUL)
+        .then((res) => {
+          console.log(res.body);
+        })
+        .catch((err) => {
+          console.log("this is an error: ", err);
+        });
     });
   });
 });

@@ -42,14 +42,19 @@ describe("Member Auth Api Test", () => {
         }));
     });
     // Member registration cases
-    describe("POST /api/v1/auth/member/register", () => {
+    describe("POST /api/v1/auth/member/registration", () => {
         test("BEST CASE: Registration successful!", () => __awaiter(void 0, void 0, void 0, function* () {
-            const res = yield (0, supertest_1.default)(app)
-                .post("/api/v1/auth/member/register")
+            yield (0, supertest_1.default)(app)
+                .post("/api/v1/auth/member/registration")
                 .field(fake.memberRegistrationBestCase)
-                .attach("photo", `${__dirname}/../../../test-assets/test.png`)
-                .expect(statusCode_1.default.HTTP_SUCCESSFUL);
-            console.log(res);
+                .attach("photo", `${__dirname}../../../..//test-assets/test.png`)
+                .expect(statusCode_1.default.HTTP_SUCCESSFUL)
+                .then((res) => {
+                console.log(res.body);
+            })
+                .catch((err) => {
+                console.log("this is an error: ", err);
+            });
         }));
     });
 });

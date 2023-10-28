@@ -1,5 +1,6 @@
 import { TDB } from "../../utils/interfaces/common";
 import {
+  IGetAttributeParams,
   IInsertBasicAttributeValuesParams,
   IInsertPriceExcludedParams,
   IInsertPriceIncludedParams,
@@ -32,8 +33,10 @@ class PropertyModel {
   }
 
   // get property basic attributes
-  public async getBasicAttribute() {
-    return await this.client.propertyBasicAttribute.findMany();
+  public async getBasicAttribute(params: IGetAttributeParams) {
+    return await this.client.propertyBasicAttribute.findMany({
+      where: params,
+    });
   }
 
   // insert price included

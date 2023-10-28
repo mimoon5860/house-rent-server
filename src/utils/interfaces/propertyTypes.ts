@@ -10,6 +10,12 @@ export interface IInsertBasicAttributeValuesParams {
   propertyId: number;
 }
 
+// get attribute params
+export interface IGetAttributeParams {
+  id?: number;
+  attributeName?: string;
+}
+
 // insert property content
 export interface IInsertPropertyContentParams {
   propertyId: number;
