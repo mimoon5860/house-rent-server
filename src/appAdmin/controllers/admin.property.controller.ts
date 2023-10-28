@@ -12,9 +12,18 @@ class AdminPropertyController extends AbstractController {
 
   // create property basic attribute controller
   public createBasicAttribute = this.asyncWrapper.wrap(
-    this.validator.createPropertyAttribute,
+    { bodySchema: this.validator.createPropertyAttribute },
     async (req: Request, res: Response) => {
       const { code, ...rest } = await this.service.createBasicAttribute(req);
+      res.status(code).json(rest);
+    }
+  );
+
+  // get property basic attribute controller
+  public getBasicAttribute = this.asyncWrapper.wrap(
+    null,
+    async (req: Request, res: Response) => {
+      const { code, ...rest } = await this.service.getPBasicAttribute(req);
       res.status(code).json(rest);
     }
   );

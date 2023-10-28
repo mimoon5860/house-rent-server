@@ -5,14 +5,31 @@ import CustomError from "../../utils/lib/customEror";
 
 type Func = (req: Request, res: Response, next: NextFunction) => Promise<void>;
 
+type Validators = {
+  bodySchema?: Joi.ObjectSchema<any>;
+  parmSchema?: Joi.ObjectSchema<any>;
+  querySchema?: Joi.ObjectSchema<any>;
+};
+
 class Wrapper extends AbstractServices {
   // CONTROLLER ASYNCWRAPPER
-  public wrap(schema: Joi.ObjectSchema<any> | null, cb: Func) {
+  public wrap(shema: Validators | null, cb: Func) {
     return async (req: Request, res: Response, next: NextFunction) => {
       try {
-        if (schema) {
-          const value = await schema.validateAsync(req.body);
-          req.body = value;
+        const { params, query, body } = req;
+        if (shema) {
+          if (shema.bodySchema) {
+            const validateBody = await shema.bodySchema.validateAsync(body);
+            req.body = validateBody;
+          }
+          if (shema.parmSchema) {
+            const validateParams = await shema.parmSchema.validateAsync(params);
+            req.params = validateParams;
+          }
+          if (shema.querySchema) {
+            const validateQuery = await shema.querySchema.validateAsync(query);
+            req.query = validateQuery;
+          }
         }
 
         await cb(req, res, next);

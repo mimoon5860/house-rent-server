@@ -11,12 +11,7 @@ class MemberRouter extends AbstractRouter {
 
   private callRouter() {
     // get profile route
-    this.router
-      .route("/profile")
-      .get((req: Request, res: Response, next: NextFunction) => {
-        console.log(req.user);
-        next();
-      }, this.controller.getProfile);
+    this.router.route("/profile").get(this.controller.getProfile);
   }
 }
 export default MemberRouter;

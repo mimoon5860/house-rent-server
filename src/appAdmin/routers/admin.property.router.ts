@@ -12,7 +12,8 @@ class AdminPropertyRouter extends AbstractRouter {
     // create property attribute router
     this.router
       .route("/basic-attribute")
-      .post(this.controller.createBasicAttribute);
+      .post(this.controller.createBasicAttribute)
+      .get(this.controller.getBasicAttribute);
   }
 }
 

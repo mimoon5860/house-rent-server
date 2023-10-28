@@ -28,5 +28,18 @@ class AdminPropertyService extends AbstractServices {
       data: attribute,
     };
   }
+
+  // get allproperty basic attribute
+  public async getPBasicAttribute(req: Request) {
+    const model = this.Models.propertyModel();
+    const attributes = await model.getBasicAttribute({});
+
+    return {
+      success: true,
+      code: this.StatusCode.HTTP_OK,
+      message: this.ResMsg.HTTP_OK,
+      data: attributes,
+    };
+  }
 }
 export default AdminPropertyService;

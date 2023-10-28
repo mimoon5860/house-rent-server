@@ -25,8 +25,24 @@ class MemberPropertyService extends abstract_service_1.default {
     getProperty(req) {
         return __awaiter(this, void 0, void 0, function* () { });
     }
+    //  upload property content service
+    uploadPropertyContenet(req) {
+        return __awaiter(this, void 0, void 0, function* () { });
+    }
+    // update property content service
+    updatePropertyContent(req) {
+        return __awaiter(this, void 0, void 0, function* () { });
+    }
+    // update property status service
+    updatePropertyStatus(req) {
+        return __awaiter(this, void 0, void 0, function* () { });
+    }
     // get single property of member service
     getSingleProperty(req) {
+        return __awaiter(this, void 0, void 0, function* () { });
+    }
+    // update a property service
+    udpateProperty(req) {
         return __awaiter(this, void 0, void 0, function* () { });
     }
 }

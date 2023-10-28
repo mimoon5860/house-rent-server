@@ -16,12 +16,23 @@ const abstract_service_1 = __importDefault(require("../../abstract/abstract.serv
 const customEror_1 = __importDefault(require("../../utils/lib/customEror"));
 class Wrapper extends abstract_service_1.default {
     // CONTROLLER ASYNCWRAPPER
-    wrap(schema, cb) {
+    wrap(shema, cb) {
         return (req, res, next) => __awaiter(this, void 0, void 0, function* () {
             try {
-                if (schema) {
-                    const value = yield schema.validateAsync(req.body);
-                    req.body = value;
+                const { params, query, body } = req;
+                if (shema) {
+                    if (shema.bodySchema) {
+                        const validateBody = yield shema.bodySchema.validateAsync(body);
+                        req.body = validateBody;
+                    }
+                    if (shema.parmSchema) {
+                        const validateParams = yield shema.parmSchema.validateAsync(params);
+                        req.params = validateParams;
+                    }
+                    if (shema.querySchema) {
+                        const validateQuery = yield shema.querySchema.validateAsync(query);
+                        req.query = validateQuery;
+                    }
                 }
                 yield cb(req, res, next);
             }

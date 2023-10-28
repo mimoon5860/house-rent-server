@@ -39,5 +39,18 @@ class AdminPropertyService extends abstract_service_1.default {
             };
         });
     }
+    // get allproperty basic attribute
+    getPBasicAttribute(req) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const model = this.Models.propertyModel();
+            const attributes = yield model.getBasicAttribute({});
+            return {
+                success: true,
+                code: this.StatusCode.HTTP_OK,
+                message: this.ResMsg.HTTP_OK,
+                data: attributes,
+            };
+        });
+    }
 }
 exports.default = AdminPropertyService;

@@ -42,6 +42,7 @@ enum StatusEnum{
 
 enum PropertyStatusEnum{
   Active
+  Inactive
   Expired
   Draft
 }
@@ -70,7 +71,7 @@ model User{
     lastName String
     photo String?
     isVerified Boolean @default(false)
-    createdAt DateTime @default(now())
+    createDate DateTime @default(now())
     status StatusEnum @default(Active)
     admin Admin?
     member Member?
@@ -105,11 +106,12 @@ model Property{
     id Int @id @default(autoincrement())
     memberId Int
     title String
-    createdAt DateTime @default(now())
+    createDate DateTime @default(now())
     shortAddress String
     areaId Int
     summary String @db.Text
     availableFrom DateTime @db.Date
+    expiryDate DateTime @db.Date
     isDeleted Boolean @default(false)
     status PropertyStatusEnum @default(Active)
     category CategoryEnum 

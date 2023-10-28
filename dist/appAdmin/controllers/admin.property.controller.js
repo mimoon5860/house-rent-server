@@ -32,8 +32,13 @@ class AdminPropertyController extends abstract_controller_1.default {
         this.validator = new property_validator_1.default();
         this.service = new admin_property_services_1.default();
         // create property basic attribute controller
-        this.createBasicAttribute = this.asyncWrapper.wrap(this.validator.createPropertyAttribute, (req, res) => __awaiter(this, void 0, void 0, function* () {
+        this.createBasicAttribute = this.asyncWrapper.wrap({ bodySchema: this.validator.createPropertyAttribute }, (req, res) => __awaiter(this, void 0, void 0, function* () {
             const _a = yield this.service.createBasicAttribute(req), { code } = _a, rest = __rest(_a, ["code"]);
+            res.status(code).json(rest);
+        }));
+        // get property basic attribute controller
+        this.getBasicAttribute = this.asyncWrapper.wrap(null, (req, res) => __awaiter(this, void 0, void 0, function* () {
+            const _b = yield this.service.getPBasicAttribute(req), { code } = _b, rest = __rest(_b, ["code"]);
             res.status(code).json(rest);
         }));
     }

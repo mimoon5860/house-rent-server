@@ -12,7 +12,7 @@ class MemberAuthController extends AbstractController {
 
   // registration controller
   public registrationController = this.asyncWrapper.wrap(
-    this.validator.registrationValidatorSchema,
+    { bodySchema: this.validator.registrationValidatorSchema },
     async (req: Request, res: Response) => {
       const { code, ...rest } = await this.services.registerMember(req);
 
@@ -26,7 +26,7 @@ class MemberAuthController extends AbstractController {
 
   // login controller
   public loginController = this.asyncWrapper.wrap(
-    this.validator.loginValidatorSchema,
+    { bodySchema: this.validator.loginValidatorSchema },
     async (req: Request, res: Response) => {
       const { code, ...rest } = await this.services.loginMember(req);
       res.status(code).json(rest);

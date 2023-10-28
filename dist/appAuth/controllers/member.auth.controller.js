@@ -32,7 +32,7 @@ class MemberAuthController extends abstract_controller_1.default {
         this.services = new member_auth_services_1.default();
         this.validator = new auth_validator_1.default();
         // registration controller
-        this.registrationController = this.asyncWrapper.wrap(this.validator.registrationValidatorSchema, (req, res) => __awaiter(this, void 0, void 0, function* () {
+        this.registrationController = this.asyncWrapper.wrap({ bodySchema: this.validator.registrationValidatorSchema }, (req, res) => __awaiter(this, void 0, void 0, function* () {
             const _a = yield this.services.registerMember(req), { code } = _a, rest = __rest(_a, ["code"]);
             if (rest.success) {
                 res.status(code).json(rest);
@@ -42,7 +42,7 @@ class MemberAuthController extends abstract_controller_1.default {
             }
         }));
         // login controller
-        this.loginController = this.asyncWrapper.wrap(this.validator.loginValidatorSchema, (req, res) => __awaiter(this, void 0, void 0, function* () {
+        this.loginController = this.asyncWrapper.wrap({ bodySchema: this.validator.loginValidatorSchema }, (req, res) => __awaiter(this, void 0, void 0, function* () {
             const _b = yield this.services.loginMember(req), { code } = _b, rest = __rest(_b, ["code"]);
             res.status(code).json(rest);
         }));
