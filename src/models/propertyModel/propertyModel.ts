@@ -1,12 +1,14 @@
 import { TDB } from "../../utils/interfaces/common";
 import {
   IGetAttributeParams,
+  IGetProperty,
   IInsertBasicAttributeValuesParams,
   IInsertPriceExcludedParams,
   IInsertPriceIncludedParams,
   IInsertProperty,
   IInsertPropertyBasicAttributeParams,
   IInsertPropertyContentParams,
+  IUpdateProperty,
 } from "../../utils/interfaces/propertyTypes";
 
 class PropertyModel {
@@ -105,6 +107,57 @@ class PropertyModel {
   public async insertProperty(params: IInsertProperty) {
     return await this.client.property.create({
       data: params,
+    });
+  }
+
+  // get property
+  public async getProperty(params: IGetProperty) {
+    return await this.client.property.findMany({
+      select: {
+        id: true,
+        title: true,
+        memberId: true,
+        status: true,
+        expiryDate: true,
+        category: true,
+        availableFrom: true,
+        shortAddress: true,
+        area: {
+          select: {
+            id: true,
+            name: true,
+            thana: {
+              select: {
+                id: true,
+                name: true,
+                district: {
+                  select: {
+                    id: true,
+                    name: true,
+                    division: {
+                      select: {
+                        id: true,
+                        name: true,
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+      where: params,
+    });
+  }
+
+  // update property
+  public async updateProperty(payload: IUpdateProperty, id: number) {
+    return await this.client.property.update({
+      data: payload,
+      where: {
+        id,
+      },
     });
   }
 }

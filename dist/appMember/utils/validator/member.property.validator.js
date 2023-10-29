@@ -29,6 +29,9 @@ class MemberPropertyValidator {
             areaId: joi_1.default.number().required(),
             availableFrom: joi_1.default.date().format("YYYY-DD-MM").min("now").required(),
             price: joi_1.default.number().required(),
+            categroy: joi_1.default.string()
+                .valid(["Sublet", "Bachelor", "Family", "Office", "Hostel", "Shop"])
+                .required(),
             priceFor: joi_1.default.string()
                 .valid(["Daily", "Weekly", "Monthly", "Half_Yearly", "Yearly"])
                 .required(),

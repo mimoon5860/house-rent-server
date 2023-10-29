@@ -43,8 +43,28 @@ export interface IInsertProperty {
   areaId: number;
   summary: string;
   availableFrom: string;
-  status?: "Active" | "Expired" | "Draft";
+  expiryDate: string;
+  status?: "Active" | "Expired" | "Draft" | "Inactive";
   category: "Sublet" | "Bachelor" | "Family" | "Office" | "Hostel" | "Shop";
   price: number;
   priceFor: "Daily" | "Weekly" | "Monthly" | "Half_Yearly" | "Yearly";
+}
+
+export interface IUpdateProperty {
+  title?: string;
+  shortAddress?: string;
+  areaId?: number;
+  summary?: string;
+  availableFrom?: string;
+  expiryDate?: string;
+  status?: "Active" | "Expired" | "Draft" | "Inactive";
+  price?: number;
+  priceFor?: "Daily" | "Weekly" | "Monthly" | "Half_Yearly" | "Yearly";
+}
+
+export interface IGetProperty {
+  id?: number;
+  memberId?: number;
+  status?: "Active" | "Expired" | "Draft";
+  category?: "Sublet" | "Bachelor" | "Family" | "Office" | "Hostel" | "Shop";
 }

@@ -84,7 +84,7 @@ class UserModel {
             mobileNumber: true,
             photo: true,
             status: true,
-            createdAt: true,
+            createDate: true,
           },
         },
         address: true,
