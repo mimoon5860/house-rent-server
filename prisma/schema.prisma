@@ -111,7 +111,7 @@ model Property{
     areaId Int
     summary String @db.Text
     availableFrom DateTime @db.Date
-    expiryDate DateTime @db.Date
+    expiryDate DateTime? @db.Date
     isDeleted Boolean @default(false)
     status PropertyStatusEnum @default(Active)
     category CategoryEnum 

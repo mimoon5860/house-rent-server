@@ -1,5 +1,4 @@
 import Joi from "joi";
-import _joiDate from "@joi/date";
 
 class MemberPropertyValidator {
   // price included schema
@@ -24,7 +23,7 @@ class MemberPropertyValidator {
     shortAddress: Joi.string().required(),
     summary: Joi.string().required(),
     areaId: Joi.number().required(),
-    availableFrom: Joi.date().format("YYYY-DD-MM").min("now").required(),
+    availableFrom: Joi.date().min("now").required(),
     price: Joi.number().required(),
     categroy: Joi.string()
       .valid(["Sublet", "Bachelor", "Family", "Office", "Hostel", "Shop"])
@@ -39,7 +38,7 @@ class MemberPropertyValidator {
 
   // save or post property schema
   public changePropertyStatusSchema = Joi.object({
-    status: Joi.string().allow(["Draft", "Active", "Inactive"]).required(),
+    status: Joi.string().allow(["Active", "Inactive"]).required(),
   });
 
   // common params id check schema

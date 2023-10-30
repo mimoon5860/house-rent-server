@@ -104,5 +104,57 @@ class PropertyModel {
             });
         });
     }
+    // get property
+    getProperty(params) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return yield this.client.property.findMany({
+                select: {
+                    id: true,
+                    title: true,
+                    memberId: true,
+                    status: true,
+                    category: true,
+                    availableFrom: true,
+                    shortAddress: true,
+                    area: {
+                        select: {
+                            id: true,
+                            name: true,
+                            thana: {
+                                select: {
+                                    id: true,
+                                    name: true,
+                                    district: {
+                                        select: {
+                                            id: true,
+                                            name: true,
+                                            division: {
+                                                select: {
+                                                    id: true,
+                                                    name: true,
+                                                },
+                                            },
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+                where: Object.assign(Object.assign({}, params), { isDeleted: false }),
+            });
+        });
+    }
+    // update property
+    updateProperty(payload, id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return yield this.client.property.update({
+                data: payload,
+                where: {
+                    id,
+                },
+            });
+        });
+    }
 }
 exports.default = PropertyModel;

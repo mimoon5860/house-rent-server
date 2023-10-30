@@ -27,7 +27,7 @@ class MemberPropertyValidator {
             shortAddress: joi_1.default.string().required(),
             summary: joi_1.default.string().required(),
             areaId: joi_1.default.number().required(),
-            availableFrom: joi_1.default.date().format("YYYY-DD-MM").min("now").required(),
+            availableFrom: joi_1.default.date().min("now").required(),
             price: joi_1.default.number().required(),
             categroy: joi_1.default.string()
                 .valid(["Sublet", "Bachelor", "Family", "Office", "Hostel", "Shop"])
@@ -41,7 +41,7 @@ class MemberPropertyValidator {
         });
         // save or post property schema
         this.changePropertyStatusSchema = joi_1.default.object({
-            status: joi_1.default.string().allow(["Draft", "Active", "Inactive"]).required(),
+            status: joi_1.default.string().allow(["Active", "Inactive"]).required(),
         });
         // common params id check schema
         this.commonParamsIdSchema = joi_1.default.object({

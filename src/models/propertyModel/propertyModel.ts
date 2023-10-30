@@ -118,7 +118,6 @@ class PropertyModel {
         title: true,
         memberId: true,
         status: true,
-        expiryDate: true,
         category: true,
         availableFrom: true,
         shortAddress: true,
@@ -147,7 +146,7 @@ class PropertyModel {
           },
         },
       },
-      where: params,
+      where: { ...params, isDeleted: false },
     });
   }
 

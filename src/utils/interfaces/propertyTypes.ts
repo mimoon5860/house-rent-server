@@ -43,7 +43,6 @@ export interface IInsertProperty {
   areaId: number;
   summary: string;
   availableFrom: string;
-  expiryDate: string;
   status?: "Active" | "Expired" | "Draft" | "Inactive";
   category: "Sublet" | "Bachelor" | "Family" | "Office" | "Hostel" | "Shop";
   price: number;

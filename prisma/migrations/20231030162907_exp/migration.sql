@@ -3,13 +3,14 @@ CREATE TABLE `User` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `userName` VARCHAR(191) NOT NULL,
     `email` VARCHAR(191) NOT NULL,
+    `password` VARCHAR(191) NOT NULL,
     `mobileNumber` VARCHAR(191) NOT NULL,
     `firstName` VARCHAR(191) NOT NULL,
     `lastName` VARCHAR(191) NOT NULL,
-    `photo` VARCHAR(191) NOT NULL,
+    `photo` VARCHAR(191) NULL,
     `isVerified` BOOLEAN NOT NULL DEFAULT false,
-    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
-    `status` ENUM('Active', 'Expired', 'Draft') NOT NULL DEFAULT 'Active',
+    `createDate` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `status` ENUM('Active', 'Inactive') NOT NULL DEFAULT 'Active',
 
     UNIQUE INDEX `User_userName_key`(`userName`),
     PRIMARY KEY (`id`)
@@ -39,7 +40,7 @@ CREATE TABLE `Member` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `userId` INTEGER NOT NULL,
     `address` VARCHAR(191) NULL,
-    `areaId` INTEGER NOT NULL,
+    `areaId` INTEGER NULL,
 
     UNIQUE INDEX `Member_userId_key`(`userId`),
     PRIMARY KEY (`id`)
@@ -50,13 +51,13 @@ CREATE TABLE `Property` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `memberId` INTEGER NOT NULL,
     `title` VARCHAR(191) NOT NULL,
-    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `createDate` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `shortAddress` VARCHAR(191) NOT NULL,
     `areaId` INTEGER NOT NULL,
     `summary` TEXT NOT NULL,
     `availableFrom` DATE NOT NULL,
     `isDeleted` BOOLEAN NOT NULL DEFAULT false,
-    `status` ENUM('Active', 'Inactive') NOT NULL DEFAULT 'Active',
+    `status` ENUM('Active', 'Inactive', 'Expired', 'Draft') NOT NULL DEFAULT 'Active',
     `category` ENUM('Sublet', 'Bachelor', 'Family', 'Office', 'Hostel', 'Shop') NOT NULL,
     `price` DOUBLE NOT NULL,
     `priceFor` ENUM('Daily', 'Weekly', 'Monthly', 'Half_Yearly', 'Yearly') NOT NULL,
@@ -99,6 +100,7 @@ CREATE TABLE `PropertyBasicAttribute` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `attributeName` VARCHAR(191) NOT NULL,
 
+    UNIQUE INDEX `PropertyBasicAttribute_attributeName_key`(`attributeName`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -167,7 +169,7 @@ ALTER TABLE `Admin` ADD CONSTRAINT `Admin_userId_fkey` FOREIGN KEY (`userId`) RE
 ALTER TABLE `Member` ADD CONSTRAINT `Member_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `User`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `Member` ADD CONSTRAINT `Member_areaId_fkey` FOREIGN KEY (`areaId`) REFERENCES `Area`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `Member` ADD CONSTRAINT `Member_areaId_fkey` FOREIGN KEY (`areaId`) REFERENCES `Area`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `Property` ADD CONSTRAINT `Property_areaId_fkey` FOREIGN KEY (`areaId`) REFERENCES `Area`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;

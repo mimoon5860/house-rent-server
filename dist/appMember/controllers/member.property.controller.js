@@ -8,26 +8,56 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __rest = (this && this.__rest) || function (s, e) {
+    var t = {};
+    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+        t[p] = s[p];
+    if (s != null && typeof Object.getOwnPropertySymbols === "function")
+        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
+            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
+                t[p[i]] = s[p[i]];
+        }
+    return t;
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const abstract_controller_1 = __importDefault(require("../../abstract/abstract.controller"));
 const member_property_services_1 = __importDefault(require("../services/member.property.services"));
+const member_property_validator_1 = __importDefault(require("../utils/validator/member.property.validator"));
 class MemberPropertyController extends abstract_controller_1.default {
     constructor() {
         super();
         this.services = new member_property_services_1.default();
+        this.validator = new member_property_validator_1.default();
         // create property controller
-        this.createProperty = this.asyncWrapper.wrap(null, (req, res) => __awaiter(this, void 0, void 0, function* () { }));
+        this.createProperty = this.asyncWrapper.wrap({ bodySchema: this.validator.createPropertySchema }, (req, res) => __awaiter(this, void 0, void 0, function* () {
+            const _a = yield this.services.createProperty(req), { code } = _a, rest = __rest(_a, ["code"]);
+            res.status(code).json(rest);
+        }));
         // get property controller
         this.getProperty = this.asyncWrapper.wrap(null, (req, res) => __awaiter(this, void 0, void 0, function* () { }));
         // upload property content controller
-        this.uploadPropertyContent = this.asyncWrapper.wrap(null, (req, res) => __awaiter(this, void 0, void 0, function* () { }));
+        this.uploadPropertyContent = this.asyncWrapper.wrap(null, (req, res) => __awaiter(this, void 0, void 0, function* () {
+            const _b = yield this.services.uploadPropertyContenet(req), { code } = _b, rest = __rest(_b, ["code"]);
+            if (rest.success) {
+                res.status(code).json(rest);
+            }
+            else {
+                this.error(rest.message, code);
+            }
+        }));
         //update property content controller
         this.updatePropertyContent = this.asyncWrapper.wrap(null, (req, res) => __awaiter(this, void 0, void 0, function* () { }));
         // update property status controller
-        this.updatePropertyStatus = this.asyncWrapper.wrap(null, (req, res) => __awaiter(this, void 0, void 0, function* () { }));
+        this.updatePropertyStatus = this.asyncWrapper.wrap({
+            bodySchema: this.validator.changePropertyStatusSchema,
+            parmSchema: this.validator.commonParamsIdSchema,
+        }, (req, res) => __awaiter(this, void 0, void 0, function* () {
+            const _c = yield this.services.updatePropertyStatus(req), { code } = _c, rest = __rest(_c, ["code"]);
+            res.status(code).json(rest);
+        }));
         // get single property controller
         this.getSingleProperty = this.asyncWrapper.wrap(null, (req, res) => __awaiter(this, void 0, void 0, function* () { }));
         // update property controller

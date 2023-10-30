@@ -6,6 +6,7 @@ import {
   IInsertPriceExcludedParams,
   IInsertPriceIncludedParams,
   IInsertPropertyContentParams,
+  IUpdateProperty,
 } from "../../utils/interfaces/propertyTypes";
 
 class MemberPropertyService extends AbstractServices {
@@ -20,9 +21,9 @@ class MemberPropertyService extends AbstractServices {
         req.body as ICreatePropertyBody;
       const { memberId } = req.user;
       const model = this.Models.propertyModel(tx);
+
       const newProperty = await model.insertProperty({
         ...rest,
-        expiryDate: "2022-05-20",
         memberId,
       });
 
@@ -36,6 +37,7 @@ class MemberPropertyService extends AbstractServices {
         });
 
       await model.insertBasicAttributeValues(attributePayload);
+
       if (priceIncluded.length) {
         const includePayload: IInsertPriceIncludedParams[] = priceIncluded.map(
           (item) => {
@@ -161,7 +163,31 @@ class MemberPropertyService extends AbstractServices {
       };
     }
     const currStatus = checkProperty[0].status;
-    // if(currStatus === "Draft" || currStatus === "")
+    if (currStatus === "Expired") {
+      return {
+        success: false,
+        code: this.StatusCode.HTTP_BAD_REQUEST,
+        message: this.ResMsg.HTTP_BAD_REQUEST,
+      };
+    }
+
+    const updatePayload: IUpdateProperty = { status };
+
+    if (currStatus === "Draft") {
+      const currentDate = new Date();
+      currentDate.setMonth(currentDate.getMonth() + 1);
+      currentDate.setDate(1);
+      const formattedDate = currentDate.toISOString().slice(0, 10);
+      updatePayload.expiryDate = formattedDate;
+    }
+
+    await model.updateProperty(updatePayload, parseInt(id));
+
+    return {
+      success: true,
+      message: this.ResMsg.HTTP_SUCCESSFUL,
+      code: this.StatusCode.HTTP_SUCCESSFUL,
+    };
   }
 
   // get single property of member service
