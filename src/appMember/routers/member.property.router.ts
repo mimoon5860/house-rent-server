@@ -9,7 +9,7 @@ class MemberPropertyRouter extends AbstractRouter {
   }
 
   private callRouter() {
-    // Create Property router
+    // Create and get Property router
     this.router
       .route("/")
       .post(this.controller.createProperty)
@@ -29,8 +29,8 @@ class MemberPropertyRouter extends AbstractRouter {
 
     // change property status
     this.router
-      .route("/update-status")
-      .post(this.controller.updatePropertyStatus);
+      .route("/status/:id")
+      .patch(this.controller.updatePropertyStatus);
 
     // update or get single property
     this.router

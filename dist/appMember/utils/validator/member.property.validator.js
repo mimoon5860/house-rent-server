@@ -13,7 +13,7 @@ class MemberPropertyValidator {
             name: joi_1.default.string().required(),
             price: joi_1.default.number().required(),
             priceFor: joi_1.default.string()
-                .allow(["Daily", "Weekly", "Monthly", "Half_Yearly", "Yearly"])
+                .valid("Daily", "Weekly", "Monthly", "Half_Yearly", "Yearly")
                 .required(),
         });
         // basic info of property schema
@@ -30,18 +30,18 @@ class MemberPropertyValidator {
             availableFrom: joi_1.default.date().min("now").required(),
             price: joi_1.default.number().required(),
             categroy: joi_1.default.string()
-                .valid(["Sublet", "Bachelor", "Family", "Office", "Hostel", "Shop"])
+                .valid("Sublet", "Bachelor", "Family", "Office", "Hostel", "Shop")
                 .required(),
             priceFor: joi_1.default.string()
-                .valid(["Daily", "Weekly", "Monthly", "Half_Yearly", "Yearly"])
+                .valid("Daily", "Weekly", "Monthly", "Half_Yearly", "Yearly")
                 .required(),
-            priceIncluded: joi_1.default.array().items(this.priceIncludedSchema).allow([]),
-            priceExluded: joi_1.default.array().items(this.priceExcludedSchema).allow([]),
+            priceIncluded: joi_1.default.array().empty().items(this.priceIncludedSchema),
+            priceExluded: joi_1.default.array().empty().items(this.priceExcludedSchema),
             basicInfo: joi_1.default.array().items(this.basicInfoSchema).required(),
         });
         // save or post property schema
         this.changePropertyStatusSchema = joi_1.default.object({
-            status: joi_1.default.string().allow(["Active", "Inactive"]).required(),
+            status: joi_1.default.string().valid("Active", "Inactive").required(),
         });
         // common params id check schema
         this.commonParamsIdSchema = joi_1.default.object({
@@ -50,14 +50,14 @@ class MemberPropertyValidator {
         // get property query chech schema
         this.getPropertyQeurySchema = joi_1.default.object({
             sortBy: joi_1.default.string()
-                .allow(["createDate", "availableFrom", "expiryDate"])
+                .valid("createDate", "availableFrom", "expiryDate")
                 .optional(),
-            orderBy: joi_1.default.string().allow("asc", "desc").optional(),
+            orderBy: joi_1.default.string().valid("asc", "desc").optional(),
             status: joi_1.default.string()
-                .allow("Draft", "Active", "Inactive", "Expired")
+                .valid("Draft", "Active", "Inactive", "Expired")
                 .optional(),
             category: joi_1.default.string()
-                .allow("Sublet", "Bachelor", "Family", "Office", "Hostel", "Shop")
+                .valid("Sublet", "Bachelor", "Family", "Office", "Hostel", "Shop")
                 .optional(),
             area: joi_1.default.number().integer().positive().optional(),
             thana: joi_1.default.number().integer().positive().optional(),

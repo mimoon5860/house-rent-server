@@ -12,7 +12,7 @@ class MemberPropertyRouter extends abstract_router_1.default {
         this.callRouter();
     }
     callRouter() {
-        // Create Property router
+        // Create and get Property router
         this.router
             .route("/")
             .post(this.controller.createProperty)
@@ -24,8 +24,8 @@ class MemberPropertyRouter extends abstract_router_1.default {
             .patch(this.uploader.localUploadRaw(this.fileFolders.PROPERTY_CONTENT), this.controller.updatePropertyContent);
         // change property status
         this.router
-            .route("/update-status")
-            .post(this.controller.updatePropertyStatus);
+            .route("/status/:id")
+            .patch(this.controller.updatePropertyStatus);
         // update or get single property
         this.router
             .route("/:id")
