@@ -9,6 +9,9 @@ export interface IInsertBasicAttributeValuesParams {
   value: string;
   propertyId: number;
 }
+export interface IUpdateBasicAttributeValuesParams {
+  value?: string;
+}
 
 // get attribute params
 export interface IGetAttributeParams {
@@ -28,12 +31,20 @@ export interface IInsertPriceIncludedParams {
   propertyId: number;
   name: string;
 }
+
 // insert price excluded params
 export interface IInsertPriceExcludedParams {
   propertyId: number;
   name: string;
   price: number;
   pirceFor: "Daily" | "Weekly" | "Monthly" | "Half_Yearly" | "Yearly";
+}
+
+// update price excluded params
+export interface IUpdatePriceExcludedParams {
+  name?: string;
+  price?: number;
+  pirceFor?: "Daily" | "Weekly" | "Monthly" | "Half_Yearly" | "Yearly";
 }
 
 export interface IInsertProperty {

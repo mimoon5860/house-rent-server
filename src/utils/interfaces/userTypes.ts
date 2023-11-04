@@ -7,6 +7,12 @@ export interface IInsertUserParams {
   lastName: string;
   photo?: string | null;
 }
+export interface IUpdateUserParams {
+  mobileNumber?: string;
+  firstName?: string;
+  lastName?: string;
+  photo?: string | null;
+}
 
 export interface IInsertUserTypeParams {
   userId: number;

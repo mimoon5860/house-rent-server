@@ -156,5 +156,47 @@ class PropertyModel {
             });
         });
     }
+    // update basic attribute value
+    updateBasicAttributeValue(payload, id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return yield this.client.propertyBasicAttributeValue.update({
+                data: payload,
+                where: { id },
+            });
+        });
+    }
+    // delete basic attribute vlaue
+    deleteBasicAttributeValue(id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return yield this.client.propertyBasicAttributeValue.deleteMany({
+                where: { id },
+            });
+        });
+    }
+    // update price excluded value
+    updatePriceExclue(payload, id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return yield this.client.priceExcluded.update({
+                data: payload,
+                where: { id },
+            });
+        });
+    }
+    // delete price excluded value
+    deletePriceExclue(id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return yield this.client.priceExcluded.delete({
+                where: { id },
+            });
+        });
+    }
+    // delete price included
+    deletePriceIncluded(id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return yield this.client.priceIncluded.delete({
+                where: { id },
+            });
+        });
+    }
 }
 exports.default = PropertyModel;

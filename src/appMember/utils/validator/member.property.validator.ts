@@ -63,6 +63,66 @@ class MemberPropertyValidator {
     district: Joi.number().integer().positive().optional(),
     division: Joi.number().integer().positive().optional(),
   });
+
+  public updatePriceExludedAddedSchemah = Joi.object({
+    name: Joi.string().optional(),
+    price: Joi.number().optional(),
+    priceFor: Joi.string()
+      .valid("Daily", "Weekly", "Monthly", "Half_Yearly", "Yearly")
+      .optional(),
+  });
+
+  public updatePriceExludedUpdatedSchemah = Joi.object({
+    id: Joi.number().required,
+    name: Joi.string().optional(),
+    price: Joi.number().optional(),
+    priceFor: Joi.string()
+      .valid("Daily", "Weekly", "Monthly", "Half_Yearly", "Yearly")
+      .optional(),
+  });
+
+  public updatePropertySchemah = Joi.object({
+    title: Joi.string().optional(),
+    shortAddress: Joi.string().optional(),
+    summary: Joi.string().optional(),
+    areaId: Joi.number().optional(),
+    availableFrom: Joi.date().min("now").optional(),
+    price: Joi.number().optional(),
+    category: Joi.string()
+      .valid("Sublet", "Bachelor", "Family", "Office", "Hostel", "Shop")
+      .optional(),
+    priceFor: Joi.string()
+      .valid("Daily", "Weekly", "Monthly", "Half_Yearly", "Yearly")
+      .optional(),
+    priceIncluded: Joi.object({
+      added: Joi.array().items(Joi.string().required()).optional(),
+      deleted: Joi.array().items(Joi.number().required()).optional(),
+    }).optional(),
+    priceExluded: Joi.object({
+      added: Joi.array().items(this.updatePriceExludedAddedSchemah).optional(),
+      deleted: Joi.array().items(Joi.number().required()).optional(),
+      updated: Joi.array()
+        .items(this.updatePriceExludedUpdatedSchemah)
+        .optional(),
+    }).optional(),
+    basicInfo: Joi.object({
+      added: Joi.array()
+        .items(
+          Joi.object({
+            attributeId: Joi.number().required(),
+            value: Joi.string().required(),
+          })
+        )
+        .optional(),
+      deleted: Joi.array().items(Joi.number().required()).optional(),
+      updated: Joi.array().items(
+        Joi.object({
+          id: Joi.number().required(),
+          value: Joi.string().required(),
+        }).optional()
+      ),
+    }),
+  });
 }
 
 export default MemberPropertyValidator;

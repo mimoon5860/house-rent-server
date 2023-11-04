@@ -8,6 +8,8 @@ import {
   IInsertProperty,
   IInsertPropertyBasicAttributeParams,
   IInsertPropertyContentParams,
+  IUpdateBasicAttributeValuesParams,
+  IUpdatePriceExcludedParams,
   IUpdateProperty,
 } from "../../utils/interfaces/propertyTypes";
 
@@ -157,6 +159,49 @@ class PropertyModel {
       where: {
         id,
       },
+    });
+  }
+
+  // update basic attribute value
+  public async updateBasicAttributeValue(
+    payload: IUpdateBasicAttributeValuesParams,
+    id: number
+  ) {
+    return await this.client.propertyBasicAttributeValue.update({
+      data: payload,
+      where: { id },
+    });
+  }
+
+  // delete basic attribute vlaue
+  public async deleteBasicAttributeValue(id: number) {
+    return await this.client.propertyBasicAttributeValue.deleteMany({
+      where: { id },
+    });
+  }
+
+  // update price excluded value
+  public async updatePriceExclue(
+    payload: IUpdatePriceExcludedParams,
+    id: number
+  ) {
+    return await this.client.priceExcluded.update({
+      data: payload,
+      where: { id },
+    });
+  }
+
+  // delete price excluded value
+  public async deletePriceExclue(id: number) {
+    return await this.client.priceExcluded.delete({
+      where: { id },
+    });
+  }
+
+  // delete price included
+  public async deletePriceIncluded(id: number) {
+    return await this.client.priceIncluded.delete({
+      where: { id },
     });
   }
 }

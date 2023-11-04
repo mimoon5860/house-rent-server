@@ -1,6 +1,9 @@
 import { Request } from "express";
 import AbstractServices from "../../abstract/abstract.service";
-import { ICreatePropertyBody } from "../utils/types/member.property.types";
+import {
+  ICreatePropertyBody,
+  IUpdatePropertyBody,
+} from "../utils/types/member.property.types";
 import {
   IInsertBasicAttributeValuesParams,
   IInsertPriceExcludedParams,
@@ -75,9 +78,6 @@ class MemberPropertyService extends AbstractServices {
     });
   }
 
-  // get property of member service
-  public async getProperty(req: Request) {}
-
   //  upload property content service
   public async uploadPropertyContenet(req: Request) {
     const files = (req.files as Express.Multer.File[]) || [];
@@ -140,7 +140,32 @@ class MemberPropertyService extends AbstractServices {
 
   // update property content service
   public async updatePropertyContent(req: Request) {
+    const files = (req.files as Express.Multer.File[]) || [];
+
+    const { id } = req.params as { id: string };
+    const { memberId } = req.user as { memberId: number };
     const model = this.Models.propertyModel();
+    if (files.length > 10) {
+      return {
+        success: false,
+        code: this.StatusCode.HTTP_BAD_REQUEST,
+        message: "File upload limit is 10",
+      };
+    }
+
+    const checkProperty = await model.getProperty({
+      id: parseInt(id),
+      memberId,
+      status: "Draft",
+    });
+
+    if (!checkProperty.length) {
+      return {
+        success: false,
+        code: this.StatusCode.HTTP_NOT_FOUND,
+        message: this.ResMsg.HTTP_NOT_FOUND,
+      };
+    }
   }
 
   // update property status service
@@ -194,7 +219,100 @@ class MemberPropertyService extends AbstractServices {
   public async getSingleProperty(req: Request) {}
 
   // update a property service
-  public async udpateProperty(req: Request) {}
+  public async updateProperty(req: Request) {
+    const { id } = req.params as { id: string };
+
+    const { priceIncluded, priceExluded, basicInfo, ...rest } =
+      req.body as IUpdatePropertyBody;
+
+    return await this.prisma.$transaction(async (tx) => {
+      const model = this.Models.propertyModel(tx);
+
+      await model.updateProperty(rest, +id);
+
+      // balic info
+      if (basicInfo?.added?.length) {
+        const attributePayload: IInsertBasicAttributeValuesParams[] =
+          basicInfo.added.map((item) => {
+            return {
+              propertyId: parseInt(id),
+              attributeId: item.attributeId,
+              value: item.value,
+            };
+          });
+
+        await model.insertBasicAttributeValues(attributePayload);
+      }
+
+      if (basicInfo?.updated?.length) {
+        basicInfo.updated.map(async (item) => {
+          await model.updateBasicAttributeValue(
+            { value: item.value as string },
+            item.id
+          );
+        });
+      }
+
+      if (basicInfo?.deleted?.length) {
+        basicInfo.deleted.map(
+          async (id) => await model.deleteBasicAttributeValue(id)
+        );
+      }
+
+      // Price Exluded
+      if (priceExluded?.added?.length) {
+        const excludePayload: IInsertPriceExcludedParams[] =
+          priceExluded?.added.map((item) => {
+            return {
+              name: item.name,
+              price: item.price,
+              pirceFor: item.priceFor,
+              propertyId: parseInt(id),
+            };
+          });
+        await model.insertPriceExcluded(excludePayload);
+      }
+
+      if (priceExluded?.updated?.length) {
+        priceExluded.updated?.map(async (item) => {
+          await model.updatePriceExclue(
+            { name: item?.name, price: item?.price, pirceFor: item?.priceFor },
+            item.id
+          );
+        });
+      }
+
+      if (priceExluded?.deleted?.length) {
+        priceExluded?.deleted?.map(
+          async (id) => await model.deletePriceExclue(id)
+        );
+      }
+
+      // Price Included
+      if (priceIncluded?.added?.length) {
+        const includePayload: IInsertPriceIncludedParams[] =
+          priceIncluded?.added.map((item) => {
+            return {
+              name: item,
+              propertyId: parseInt(id),
+            };
+          });
+        await model.insertPriceIncluded(includePayload);
+      }
+
+      if (priceIncluded?.deleted?.length) {
+        priceIncluded.deleted.map(
+          async (id) => await model.deletePriceIncluded(id)
+        );
+      }
+
+      return {
+        success: true,
+        code: this.StatusCode.HTTP_SUCCESSFUL,
+        message: this.ResMsg.HTTP_SUCCESSFUL,
+      };
+    });
+  }
 }
 
 export default MemberPropertyService;

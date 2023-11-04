@@ -30,4 +30,7 @@ ResMsg.USER_WITH_EXIST_WITH_EMAIL = "User already exist with this email";
 // Login
 ResMsg.LOGIN_SUCCESSFUL = "You are now logged in";
 ResMsg.UNABLE_FOR_STATUS = "Unable to complete your request for application status reason";
+// profile
+ResMsg.PROFILE_UPDATED = "Profile update successfuly";
+ResMsg.PROFILE_DELETED = "Profile delete successfuly";
 exports.default = ResMsg;

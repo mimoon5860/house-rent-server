@@ -47,24 +47,24 @@ class MemberPropertyController extends AbstractController {
 
   // update property status controller
   public updatePropertyStatus = this.asyncWrapper.wrap(
-    {
-      bodySchema: this.validator.changePropertyStatusSchema,
-      parmSchema: this.validator.commonParamsIdSchema,
-    },
+    { bodySchema: this.validator.updatePropertySchemah },
     async (req: Request, res: Response) => {
       const { code, ...rest } = await this.services.updatePropertyStatus(req);
       res.status(code).json(rest);
     }
   );
 
-  // get single property controller
-  public getSingleProperty = this.asyncWrapper.wrap(
-    null,
-    async (req: Request, res: Response) => {}
-  );
-
   // update property controller
   public updateProperty = this.asyncWrapper.wrap(
+    { bodySchema: this.validator.updatePropertySchemah },
+    async (req: Request, res: Response) => {
+      const { code, ...rest } = await this.services.updateProperty(req);
+      res.status(code).json(rest);
+    }
+  );
+
+  // get single property controller
+  public getSingleProperty = this.asyncWrapper.wrap(
     null,
     async (req: Request, res: Response) => {}
   );

@@ -64,6 +64,59 @@ class MemberPropertyValidator {
             district: joi_1.default.number().integer().positive().optional(),
             division: joi_1.default.number().integer().positive().optional(),
         });
+        this.updatePriceExludedAddedSchemah = joi_1.default.object({
+            name: joi_1.default.string().optional(),
+            price: joi_1.default.number().optional(),
+            priceFor: joi_1.default.string()
+                .valid("Daily", "Weekly", "Monthly", "Half_Yearly", "Yearly")
+                .optional(),
+        });
+        this.updatePriceExludedUpdatedSchemah = joi_1.default.object({
+            id: joi_1.default.number().required,
+            name: joi_1.default.string().optional(),
+            price: joi_1.default.number().optional(),
+            priceFor: joi_1.default.string()
+                .valid("Daily", "Weekly", "Monthly", "Half_Yearly", "Yearly")
+                .optional(),
+        });
+        this.updatePropertySchemah = joi_1.default.object({
+            title: joi_1.default.string().optional(),
+            shortAddress: joi_1.default.string().optional(),
+            summary: joi_1.default.string().optional(),
+            areaId: joi_1.default.number().optional(),
+            availableFrom: joi_1.default.date().min("now").optional(),
+            price: joi_1.default.number().optional(),
+            category: joi_1.default.string()
+                .valid("Sublet", "Bachelor", "Family", "Office", "Hostel", "Shop")
+                .optional(),
+            priceFor: joi_1.default.string()
+                .valid("Daily", "Weekly", "Monthly", "Half_Yearly", "Yearly")
+                .optional(),
+            priceIncluded: joi_1.default.object({
+                added: joi_1.default.array().items(joi_1.default.string().required()).optional(),
+                deleted: joi_1.default.array().items(joi_1.default.number().required()).optional(),
+            }).optional(),
+            priceExluded: joi_1.default.object({
+                added: joi_1.default.array().items(this.updatePriceExludedAddedSchemah).optional(),
+                deleted: joi_1.default.array().items(joi_1.default.number().required()).optional(),
+                updated: joi_1.default.array()
+                    .items(this.updatePriceExludedUpdatedSchemah)
+                    .optional(),
+            }).optional(),
+            basicInfo: joi_1.default.object({
+                added: joi_1.default.array()
+                    .items(joi_1.default.object({
+                    attributeId: joi_1.default.number().required(),
+                    value: joi_1.default.string().required(),
+                }))
+                    .optional(),
+                deleted: joi_1.default.array().items(joi_1.default.number().required()).optional(),
+                updated: joi_1.default.array().items(joi_1.default.object({
+                    id: joi_1.default.number().required(),
+                    value: joi_1.default.string().required(),
+                }).optional()),
+            }),
+        });
     }
 }
 exports.default = MemberPropertyValidator;

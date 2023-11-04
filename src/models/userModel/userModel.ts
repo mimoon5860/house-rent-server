@@ -5,6 +5,7 @@ import {
   IInsertMember,
   IInsertUserParams,
   IInsertUserTypeParams,
+  IUpdateUserParams,
 } from "../../utils/interfaces/userTypes";
 
 class UserModel {
@@ -119,5 +120,40 @@ class UserModel {
 
   // get user admin
   public async getUserAdmin() {}
+
+  // change passwoard
+  public async changePassword(password: string, id: number) {
+    return await this.client.user.update({
+      data: { password },
+      where: { id },
+    });
+  }
+
+  // update user
+  public async updateUser(payload: IUpdateUserParams, id: number) {
+    return await this.client.user.update({
+      data: payload,
+      where: { id },
+    });
+  }
+
+  // update member
+  public async updateMember(
+    payload: { address?: string; areaId?: number },
+    id: number
+  ) {
+    return await this.client.member.update({
+      data: { address: payload.address, areaId: payload.areaId },
+      where: { id },
+    });
+  }
+
+  // delete user
+  public async inActiveUser(id: number) {
+    return this.client.user.update({
+      data: { status: "Inactive" },
+      where: { id },
+    });
+  }
 }
 export default UserModel;

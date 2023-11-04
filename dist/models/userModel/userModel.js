@@ -118,5 +118,41 @@ class UserModel {
     getUserAdmin() {
         return __awaiter(this, void 0, void 0, function* () { });
     }
+    // change passwoard
+    changePassword(password, id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return yield this.client.user.update({
+                data: { password },
+                where: { id },
+            });
+        });
+    }
+    // update user
+    updateUser(payload, id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return yield this.client.user.update({
+                data: payload,
+                where: { id },
+            });
+        });
+    }
+    // update member
+    updateMember(payload, id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return yield this.client.member.update({
+                data: { address: payload.address, areaId: payload.areaId },
+                where: { id },
+            });
+        });
+    }
+    // delete user
+    inActiveUser(id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return this.client.user.update({
+                data: { status: "Inactive" },
+                where: { id },
+            });
+        });
+    }
 }
 exports.default = UserModel;
