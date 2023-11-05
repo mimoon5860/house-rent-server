@@ -3,6 +3,7 @@ import Joi from "joi";
 class MemberPropertyValidator {
   // price included schema
   private priceIncludedSchema = Joi.string().required();
+
   // price excluded schema
   private priceExcludedSchema = Joi.object({
     name: Joi.string().required(),
@@ -11,6 +12,7 @@ class MemberPropertyValidator {
       .valid("Daily", "Weekly", "Monthly", "Half_Yearly", "Yearly")
       .required(),
   });
+
   // basic info of property schema
   private basicInfoSchema = Joi.object({
     attributeId: Joi.number().required(),

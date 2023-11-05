@@ -76,7 +76,10 @@ class MemberPropertyService extends AbstractServices {
   }
 
   // get property of member service
-  public async getProperty(req: Request) {}
+  public async getProperty(req: Request) {
+    const { status, title, deleted, from_date, to_date } = req.query;
+    const { memberId } = req.user;
+  }
 
   //  upload property content service
   public async uploadPropertyContenet(req: Request) {

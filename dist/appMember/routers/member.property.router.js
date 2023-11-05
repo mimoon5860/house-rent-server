@@ -17,7 +17,7 @@ class MemberPropertyRouter extends abstract_router_1.default {
             .route("/")
             .post(this.controller.createProperty)
             .get(this.controller.getProperty);
-        // upload property content
+        // upload or update property content
         this.router
             .route("/content/:id")
             .post(this.uploader.localUploadRaw(this.fileFolders.PROPERTY_CONTENT), this.controller.uploadPropertyContent)

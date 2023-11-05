@@ -77,7 +77,10 @@ class MemberPropertyService extends abstract_service_1.default {
     }
     // get property of member service
     getProperty(req) {
-        return __awaiter(this, void 0, void 0, function* () { });
+        return __awaiter(this, void 0, void 0, function* () {
+            const { status, title, deleted, from_date, to_date } = req.query;
+            const { memberId } = req.user;
+        });
     }
     //  upload property content service
     uploadPropertyContenet(req) {

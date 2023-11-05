@@ -15,7 +15,7 @@ class MemberPropertyRouter extends AbstractRouter {
       .post(this.controller.createProperty)
       .get(this.controller.getProperty);
 
-    // upload property content
+    // upload or update property content
     this.router
       .route("/content/:id")
       .post(
