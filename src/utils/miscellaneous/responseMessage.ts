@@ -1,3 +1,4 @@
+import { Prisma } from "@prisma/client";
 class ResMsg {
   static readonly HTTP_OK = "The request is OK";
   static readonly HTTP_SUCCESSFUL =
@@ -43,6 +44,10 @@ class ResMsg {
 
   static readonly UNABLE_FOR_STATUS =
     "Unable to complete your request for application status reason";
+
+  // profile
+  static readonly PROFILE_UPDATED = "Profile update successfuly";
+  static readonly PROFILE_DELETED = "Profile delete successfuly";
 }
 
 export default ResMsg;

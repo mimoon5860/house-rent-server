@@ -12,8 +12,14 @@ class MemberRouter extends abstract_router_1.default {
         this.callRouter();
     }
     callRouter() {
-        // get profile route
-        this.router.route("/profile").get(this.controller.getProfile);
+        // profile route
+        this.router
+            .route("/profile")
+            .get(this.controller.getProfile)
+            .patch(this.uploader.localUploadRaw(this.fileFolders.MEMBER_FILES), this.controller.updateProfile)
+            .delete(this.controller.deleteProfile);
+        // change passwoard
+        this.router.post("/change-password", this.controller.changePassword);
     }
 }
 exports.default = MemberRouter;

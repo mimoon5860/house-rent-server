@@ -1,6 +1,5 @@
-
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
   previewFeatures = ["views"]
 }
 
@@ -10,17 +9,17 @@ datasource db {
 }
 
 // Enum type 
-enum RoleEnum{
+enum RoleEnum {
   SUPER_ADMIN
   ADMIN
 }
 
-enum UserTypeEnum{
+enum UserTypeEnum {
   ADMIN
   MEMBER
 }
 
-enum CategoryEnum{
+enum CategoryEnum {
   Sublet
   Bachelor
   Family
@@ -29,25 +28,25 @@ enum CategoryEnum{
   Shop
 }
 
-enum TypeEnum{
+enum TypeEnum {
   Room
   Flat
   Seat
 }
 
-enum StatusEnum{
+enum StatusEnum {
   Active
   Inactive
 }
 
-enum PropertyStatusEnum{
+enum PropertyStatusEnum {
   Active
   Inactive
   Expired
   Draft
 }
 
-enum PriceForEnum{
+enum PriceForEnum {
   Daily
   Weekly
   Monthly
@@ -55,156 +54,169 @@ enum PriceForEnum{
   Yearly
 }
 
-enum ContentTypeEnum{
+enum ContentTypeEnum {
   Audio
   Video
   Photo
 }
 
-model User{
-    id Int @id @default(autoincrement())
-    userName String @unique
-    email String
-    password String
-    mobileNumber String
-    firstName String
-    lastName String
-    photo String?
-    isVerified Boolean @default(false)
-    createDate DateTime @default(now())
-    status StatusEnum @default(Active)
-    admin Admin?
-    member Member?
-    type UserType[]
+enum OtpType {
+  Reset_Member
+  Reset_Admin
+  Verify_Member
+  Verify_Admin
 }
 
-model UserType{
-  id Int @id @default(autoincrement())
+model User {
+  id           Int        @id @default(autoincrement())
+  userName     String     @unique
+  email        String
+  password     String
+  mobileNumber String
+  firstName    String
+  lastName     String
+  photo        String?
+  isVerified   Boolean    @default(false)
+  createDate   DateTime   @default(now())
+  status       StatusEnum @default(Active)
+  admin        Admin?
+  member       Member?
+  type         UserType[]
+}
+
+model UserType {
+  id       Int          @id @default(autoincrement())
   userType UserTypeEnum @default(MEMBER)
-  userId Int 
-  user User  @relation(fields: [userId], references: [id])
+  userId   Int
+  user     User         @relation(fields: [userId], references: [id])
 }
 
-model Admin{
-   id Int @id @default(autoincrement())
-   role    RoleEnum
-   userId Int @unique
-   user User  @relation(fields: [userId], references: [id])
+model Admin {
+  id     Int      @id @default(autoincrement())
+  role   RoleEnum
+  userId Int      @unique
+  user   User     @relation(fields: [userId], references: [id])
 }
 
-model Member{
-  id Int @id @default(autoincrement())
-  userId Int @unique
-  address String?
-  areaId Int?
-  user User  @relation(fields: [userId], references: [id])
-  area Area? @relation(fields: [areaId], references: [id])
+model Member {
+  id       Int        @id @default(autoincrement())
+  userId   Int        @unique
+  address  String?
+  areaId   Int?
+  user     User       @relation(fields: [userId], references: [id])
+  area     Area?      @relation(fields: [areaId], references: [id])
   property Property[]
 }
 
-model Property{
-    id Int @id @default(autoincrement())
-    memberId Int
-    title String
-    createDate DateTime @default(now())
-    shortAddress String
-    areaId Int
-    summary String @db.Text
-    availableFrom DateTime @db.Date
-    expiryDate DateTime? @db.Date
-    isDeleted Boolean @default(false)
-    status PropertyStatusEnum @default(Active)
-    category CategoryEnum 
-    price Float
-    priceFor PriceForEnum
-    area Area  @relation(fields: [areaId], references: [id])  
-    member Member @relation(fields: [memberId], references: [id])
-    basicInfo PropertyBasicAttributeValue[]
-    includedPrice PriceIncluded[]
-    excludedPrice PriceExcluded[]
-    contents PropertyContent[]
+model Property {
+  id            Int                           @id @default(autoincrement())
+  memberId      Int
+  title         String
+  createDate    DateTime                      @default(now())
+  shortAddress  String
+  areaId        Int
+  summary       String                        @db.Text
+  availableFrom DateTime                      @db.Date
+  expiryDate    DateTime?                     @db.Date
+  isDeleted     Boolean                       @default(false)
+  status        PropertyStatusEnum            @default(Active)
+  category      CategoryEnum
+  price         Float
+  priceFor      PriceForEnum
+  area          Area                          @relation(fields: [areaId], references: [id])
+  member        Member                        @relation(fields: [memberId], references: [id])
+  basicInfo     PropertyBasicAttributeValue[]
+  includedPrice PriceIncluded[]
+  excludedPrice PriceExcluded[]
+  contents      PropertyContent[]
 }
 
-model PropertyContent{
-  id Int @id @default(autoincrement())
+model PropertyContent {
+  id         Int             @id @default(autoincrement())
   propertyId Int
-  path String
-  type ContentTypeEnum @default(Photo)
-  property Property  @relation(fields: [propertyId], references: [id])  
+  path       String
+  type       ContentTypeEnum @default(Photo)
+  property   Property        @relation(fields: [propertyId], references: [id])
 }
 
-model PriceIncluded{
-    id Int @id @default(autoincrement())
-    propertyId Int
-    name String
-    property Property  @relation(fields: [propertyId], references: [id])      
+model PriceIncluded {
+  id         Int      @id @default(autoincrement())
+  propertyId Int
+  name       String
+  property   Property @relation(fields: [propertyId], references: [id])
 }
 
-model PriceExcluded{
-   id Int @id @default(autoincrement())
-   propertyId Int
-   name String
-   price Float
-   pirceFor PriceForEnum
-   property Property  @relation(fields: [propertyId], references: [id])      
+model PriceExcluded {
+  id         Int          @id @default(autoincrement())
+  propertyId Int
+  name       String
+  price      Float
+  pirceFor   PriceForEnum
+  property   Property     @relation(fields: [propertyId], references: [id])
 }
 
-
-model PropertyBasicAttribute{
-   id Int @id @default(autoincrement())
-   attributeName String @unique
-   attributeValues PropertyBasicAttributeValue[]
+model PropertyBasicAttribute {
+  id              Int                           @id @default(autoincrement())
+  attributeName   String                        @unique
+  attributeValues PropertyBasicAttributeValue[]
 }
 
-
-model PropertyBasicAttributeValue{
-  id Int @id @default(autoincrement())
+model PropertyBasicAttributeValue {
+  id          Int                    @id @default(autoincrement())
   attributeId Int
-  value String
-  propertyId Int
-  property Property  @relation(fields: [propertyId], references: [id])      
-  attribute PropertyBasicAttribute  @relation(fields: [attributeId], references: [id])      
+  value       String
+  propertyId  Int
+  property    Property               @relation(fields: [propertyId], references: [id])
+  attribute   PropertyBasicAttribute @relation(fields: [attributeId], references: [id])
 }
 
-
-model Division{
-  id       Int     @id @default(autoincrement())
-  name String
-  bnName String?
-  url String?
+model Division {
+  id        Int        @id @default(autoincrement())
+  name      String
+  bnName    String?
+  url       String?
   districts District[]
 }
 
-model District{
-  id       Int    @id @default(autoincrement())
-  name String
-  bnName String?
+model District {
+  id         Int      @id @default(autoincrement())
+  name       String
+  bnName     String?
   divisionId Int
-  lat String?
-  lon String?
-  url String?
-  division Division @relation(fields: [divisionId],references: [id])
-  thana Thana[]
+  lat        String?
+  lon        String?
+  url        String?
+  division   Division @relation(fields: [divisionId], references: [id])
+  thana      Thana[]
 }
 
-model Thana{
-  id       Int    @id @default(autoincrement())
+model Thana {
+  id         Int      @id @default(autoincrement())
   districtId Int
-  name String
-  bnName String?
-  url String?
-  district District  @relation(fields: [districtId],references: [id])
-  area Area[]
+  name       String
+  bnName     String?
+  url        String?
+  district   District @relation(fields: [districtId], references: [id])
+  area       Area[]
 }
 
-model Area{
-  id       Int    @id @default(autoincrement())
-  thanaId Int
-  name String
-  bnName String?
-  url String?
-  thana Thana @relation(fields: [thanaId], references: [id])
-  member Member[]
+model Area {
+  id       Int        @id @default(autoincrement())
+  thanaId  Int
+  name     String
+  bnName   String?
+  url      String?
+  thana    Thana      @relation(fields: [thanaId], references: [id])
+  member   Member[]
   property Property[]
 }
 
+model EmailOTP {
+  id         Int      @id @default(autoincrement())
+  email      String
+  createDate DateTime @default(now())
+  hashedOtp  String
+  type       OtpType
+  matched    Boolean
+  tried      Int
+}

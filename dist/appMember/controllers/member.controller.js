@@ -25,13 +25,29 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const abstract_controller_1 = __importDefault(require("../../abstract/abstract.controller"));
 const member_services_1 = __importDefault(require("../services/member.services"));
+const member_validator_1 = __importDefault(require("../utils/validator/member.validator"));
 class MemberController extends abstract_controller_1.default {
     constructor() {
         super();
         this.services = new member_services_1.default();
+        this.validator = new member_validator_1.default();
         // get profile
         this.getProfile = this.asyncWrapper.wrap(null, (req, res) => __awaiter(this, void 0, void 0, function* () {
             const _a = yield this.services.getProfile(req), { code } = _a, rest = __rest(_a, ["code"]);
+            res.status(code).json(rest);
+        }));
+        // change passoward controller
+        this.changePassword = this.asyncWrapper.wrap({ bodySchema: this.validator.changePassword }, (req, res) => __awaiter(this, void 0, void 0, function* () {
+            const _b = yield this.services.changePassword(req), { code } = _b, rest = __rest(_b, ["code"]);
+            res.status(code).json(rest);
+        }));
+        // update profile controller
+        this.updateProfile = this.asyncWrapper.wrap({ bodySchema: this.validator.updateProfile }, (req, res) => __awaiter(this, void 0, void 0, function* () {
+            const _c = yield this.services.updateProfile(req), { code } = _c, rest = __rest(_c, ["code"]);
+            res.status(code).json(rest);
+        }));
+        this.deleteProfile = this.asyncWrapper.wrap(null, (req, res) => __awaiter(this, void 0, void 0, function* () {
+            const _d = yield this.services.deleteProfile(req), { code } = _d, rest = __rest(_d, ["code"]);
             res.status(code).json(rest);
         }));
     }
