@@ -129,6 +129,14 @@ model Property {
   includedPrice PriceIncluded[]
   excludedPrice PriceExcluded[]
   contents      PropertyContent[]
+  contact       PropertyContact[]
+}
+
+model PropertyContact{
+  id         Int             @id @default(autoincrement())
+  contact String
+  propertyId Int
+  property   Property        @relation(fields: [propertyId], references: [id])
 }
 
 model PropertyContent {

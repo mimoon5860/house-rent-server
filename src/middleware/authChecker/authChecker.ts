@@ -1,9 +1,9 @@
 import { NextFunction, Request, Response } from "express";
 import StatusCode from "../../utils/miscellaneous/statusCode";
 import ResMsg from "../../utils/miscellaneous/responseMessage";
-import { IAdmin, IUser } from "../../appCommon/utils/types/commonTypes";
 import config from "../../utils/config/config";
 import Lib from "../../utils/lib/lib";
+import { IAdmin, IUser } from "../../appAdmin/utils/types/commonTypes";
 
 class AuthChecker {
   // admin auth checker

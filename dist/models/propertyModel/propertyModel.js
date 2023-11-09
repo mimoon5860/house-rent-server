@@ -107,6 +107,21 @@ class PropertyModel {
             }
         });
     }
+    // insert property contact
+    insertPropertyContact(params) {
+        return __awaiter(this, void 0, void 0, function* () {
+            if (Array.isArray(params)) {
+                return yield this.client.propertyContact.createMany({
+                    data: params,
+                });
+            }
+            else {
+                return yield this.client.propertyContact.create({
+                    data: params,
+                });
+            }
+        });
+    }
     // insert property
     insertProperty(params) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -118,14 +133,32 @@ class PropertyModel {
     // get property
     getProperty(params) {
         return __awaiter(this, void 0, void 0, function* () {
-            const { deleted, title, fromDate, toDate, limit = 100, skip = 0 } = params, rest = __rest(params, ["deleted", "title", "fromDate", "toDate", "limit", "skip"]);
+            const { isDeleted, title, fromDate, toDate, limit = 20, skip = 0, area, district, division, thana } = params, rest = __rest(params, ["isDeleted", "title", "fromDate", "toDate", "limit", "skip", "area", "district", "division", "thana"]);
             const where = Object.assign(Object.assign({}, rest), { isDeleted: false });
-            if (deleted) {
-                where.isDeleted = deleted;
+            if (isDeleted) {
+                where.isDeleted = isDeleted;
             }
             if (title) {
                 where.title = {
                     contains: title,
+                };
+            }
+            if (area) {
+                where.area = { name: area };
+            }
+            if (thana) {
+                where.area = { thana: { name: thana } };
+            }
+            if (district) {
+                where.area = { thana: { district: { name: district } } };
+            }
+            if (division) {
+                where.area = {
+                    thana: {
+                        district: {
+                            division: { name: division },
+                        },
+                    },
                 };
             }
             if (fromDate && toDate) {
@@ -227,6 +260,12 @@ class PropertyModel {
                     status: true,
                     category: true,
                     price: true,
+                    contact: {
+                        select: {
+                            id: true,
+                            contact: true,
+                        },
+                    },
                     basicInfo: {
                         select: {
                             id: true,

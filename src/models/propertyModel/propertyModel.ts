@@ -10,6 +10,7 @@ import {
   IInsertPriceIncludedParams,
   IInsertProperty,
   IInsertPropertyBasicAttributeParams,
+  IInsertPropertyContact,
   IInsertPropertyContentParams,
   IUpdateBasicAttributeValuesParams,
   IUpdatePriceExcludedParams,
@@ -108,6 +109,21 @@ class PropertyModel {
     }
   }
 
+  // insert property contact
+  public async insertPropertyContact(
+    params: IInsertPropertyContact | IInsertPropertyContact[]
+  ) {
+    if (Array.isArray(params)) {
+      return await this.client.propertyContact.createMany({
+        data: params,
+      });
+    } else {
+      return await this.client.propertyContact.create({
+        data: params,
+      });
+    }
+  }
+
   // insert property
   public async insertProperty(params: IInsertProperty) {
     return await this.client.property.create({
@@ -118,24 +134,48 @@ class PropertyModel {
   // get property
   public async getProperty(params: IGetProperty) {
     const {
-      deleted,
+      isDeleted,
       title,
       fromDate,
       toDate,
-      limit = 100,
+      limit = 20,
       skip = 0,
+      area,
+      district,
+      division,
+      thana,
       ...rest
     } = params;
 
     const where: Prisma.PropertyWhereInput = { ...rest, isDeleted: false };
 
-    if (deleted) {
-      where.isDeleted = deleted;
+    if (isDeleted) {
+      where.isDeleted = isDeleted;
     }
 
     if (title) {
       where.title = {
         contains: title,
+      };
+    }
+
+    if (area) {
+      where.area = { name: area };
+    }
+    if (thana) {
+      where.area = { thana: { name: thana } };
+    }
+    if (district) {
+      where.area = { thana: { district: { name: district } } };
+    }
+
+    if (division) {
+      where.area = {
+        thana: {
+          district: {
+            division: { name: division },
+          },
+        },
       };
     }
 
@@ -239,6 +279,12 @@ class PropertyModel {
         status: true,
         category: true,
         price: true,
+        contact: {
+          select: {
+            id: true,
+            contact: true,
+          },
+        },
         basicInfo: {
           select: {
             id: true,

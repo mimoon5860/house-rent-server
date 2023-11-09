@@ -14,3 +14,14 @@ export interface IAdmin {
   type: string;
   status: boolean;
 }
+
+export interface IGetPropertyQuery {
+  limit?: string;
+  skip?: string;
+  area?: string;
+  thana?: string;
+  district?: string;
+  division?: string;
+  title?: string;
+  category?: "Sublet" | "Bachelor" | "Family" | "Office" | "Hostel" | "Shop";
+}

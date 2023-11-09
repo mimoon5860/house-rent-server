@@ -30,7 +30,7 @@ class MemberPropertyController extends AbstractController {
 
   // upload property content controller
   public uploadPropertyContent = this.asyncWrapper.wrap(
-    null,
+    { parmSchema: this.validator.paramsIdValidatorSchema },
     async (req: Request, res: Response) => {
       const { code, ...rest } = await this.services.uploadPropertyContenet(req);
 
@@ -44,13 +44,16 @@ class MemberPropertyController extends AbstractController {
 
   //update property content controller
   public updatePropertyContent = this.asyncWrapper.wrap(
-    null,
+    { parmSchema: this.validator.paramsIdValidatorSchema },
     async (req: Request, res: Response) => {}
   );
 
   // update property status controller
   public updatePropertyStatus = this.asyncWrapper.wrap(
-    { bodySchema: this.validator.updatePropertyStatusSchmea },
+    {
+      bodySchema: this.validator.updatePropertyStatusSchmea,
+      parmSchema: this.validator.paramsIdValidatorSchema,
+    },
     async (req: Request, res: Response) => {
       const { code, ...rest } = await this.services.updatePropertyStatus(req);
       res.status(code).json(rest);
@@ -59,7 +62,10 @@ class MemberPropertyController extends AbstractController {
 
   // update property controller
   public updateProperty = this.asyncWrapper.wrap(
-    { bodySchema: this.validator.updatePropertySchemah },
+    {
+      bodySchema: this.validator.updatePropertySchemah,
+      parmSchema: this.validator.paramsIdValidatorSchema,
+    },
     async (req: Request, res: Response) => {
       const { code, ...rest } = await this.services.updateProperty(req);
       res.status(code).json(rest);
@@ -68,7 +74,7 @@ class MemberPropertyController extends AbstractController {
 
   // get single property controller
   public getSingleProperty = this.asyncWrapper.wrap(
-    null,
+    { parmSchema: this.validator.paramsIdValidatorSchema },
     async (req: Request, res: Response) => {
       const { code, ...rest } = await this.services.getSingleProperty(req);
       res.status(code).json(rest);

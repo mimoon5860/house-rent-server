@@ -10,6 +10,7 @@ import {
   IInsertBasicAttributeValuesParams,
   IInsertPriceExcludedParams,
   IInsertPriceIncludedParams,
+  IInsertPropertyContact,
   IInsertPropertyContentParams,
   IUpdateProperty,
 } from "../../utils/interfaces/propertyTypes";
@@ -22,8 +23,14 @@ class MemberPropertyService extends AbstractServices {
   // create property service
   public async createProperty(req: Request) {
     return this.prisma.$transaction(async (tx) => {
-      const { basicInfo, priceExcluded, priceIncluded, ...rest } =
-        req.body as ICreatePropertyBody;
+      const {
+        basicInfo,
+        priceExcluded,
+        priceIncluded,
+        mobileNumber,
+        alternativeMobileNumber,
+        ...rest
+      } = req.body as ICreatePropertyBody;
       const { memberId } = req.user;
       const model = this.Models.propertyModel(tx);
 
@@ -31,6 +38,13 @@ class MemberPropertyService extends AbstractServices {
         ...rest,
         memberId,
       });
+
+      const contactBody: IInsertPropertyContact[] = [
+        { contact: mobileNumber, propertyId: newProperty.id },
+        { contact: alternativeMobileNumber, propertyId: newProperty.id },
+      ];
+
+      await model.insertPropertyContact(contactBody);
 
       const attributePayload: IInsertBasicAttributeValuesParams[] =
         basicInfo.map((item) => {

@@ -26,6 +26,12 @@ export interface IInsertPropertyContentParams {
   type?: "Audio" | "Video" | "Photo";
 }
 
+// insert property contact
+export interface IInsertPropertyContact {
+  contact: string;
+  propertyId: number;
+}
+
 // insert price included params
 export interface IInsertPriceIncludedParams {
   propertyId: number;
@@ -76,12 +82,16 @@ export interface IGetProperty {
   memberId?: number;
   status?: "Active" | "Expired" | "Draft" | "Inactive";
   category?: "Sublet" | "Bachelor" | "Family" | "Office" | "Hostel" | "Shop";
-  deleted?: boolean;
+  isDeleted?: boolean;
   title?: string;
   fromDate?: string;
   toDate?: string;
   limit?: number;
   skip?: number;
+  area?: string;
+  thana?: string;
+  district?: string;
+  division?: string;
 }
 
 export interface ICheckProperty {
@@ -89,12 +99,12 @@ export interface ICheckProperty {
   memberId?: number;
   status?: "Active" | "Expired" | "Draft" | "Inactive";
   category?: "Sublet" | "Bachelor" | "Family" | "Office" | "Hostel" | "Shop";
-  deleted?: boolean;
+  isDeleted?: boolean;
 }
 
 export interface IGetSingleProperty {
   id: number;
-  deleted?: boolean;
+  isDeleted?: boolean;
   memberId?: number;
   status?: "Active" | "Expired" | "Draft" | "Inactive";
 }

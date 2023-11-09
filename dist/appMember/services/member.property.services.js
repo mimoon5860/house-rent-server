@@ -32,10 +32,15 @@ class MemberPropertyService extends abstract_service_1.default {
     createProperty(req) {
         return __awaiter(this, void 0, void 0, function* () {
             return this.prisma.$transaction((tx) => __awaiter(this, void 0, void 0, function* () {
-                const _a = req.body, { basicInfo, priceExcluded, priceIncluded } = _a, rest = __rest(_a, ["basicInfo", "priceExcluded", "priceIncluded"]);
+                const _a = req.body, { basicInfo, priceExcluded, priceIncluded, mobileNumber, alternativeMobileNumber } = _a, rest = __rest(_a, ["basicInfo", "priceExcluded", "priceIncluded", "mobileNumber", "alternativeMobileNumber"]);
                 const { memberId } = req.user;
                 const model = this.Models.propertyModel(tx);
                 const newProperty = yield model.insertProperty(Object.assign(Object.assign({}, rest), { memberId }));
+                const contactBody = [
+                    { contact: mobileNumber, propertyId: newProperty.id },
+                    { contact: alternativeMobileNumber, propertyId: newProperty.id },
+                ];
+                yield model.insertPropertyContact(contactBody);
                 const attributePayload = basicInfo.map((item) => {
                     return {
                         propertyId: newProperty.id,

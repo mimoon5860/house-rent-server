@@ -3,11 +3,13 @@ import MemberRootRouter from "../appMember/memberRoot.router";
 import AuthRootRouter from "../appAuth/authRoot.router";
 import AuthChecker from "../middleware/authChecker/authChecker";
 import AdminRootRouter from "../appAdmin/adminRouter";
+import PublicRouter from "../appPublic/publicRoot.router";
 
 class RootRouter {
   public v1Router = Router();
   private authRouter = new AuthRootRouter();
   private memberRouter = new MemberRootRouter();
+  private publicRouter = new PublicRouter();
   private adminRouter = new AdminRootRouter();
   private authChecker = new AuthChecker();
 
@@ -28,6 +30,9 @@ class RootRouter {
 
     // admin router
     this.v1Router.use("/admin", this.adminRouter.router);
+
+    // public router
+    this.v1Router.use("/public", this.publicRouter.router);
   }
 }
 

@@ -8,11 +8,13 @@ const memberRoot_router_1 = __importDefault(require("../appMember/memberRoot.rou
 const authRoot_router_1 = __importDefault(require("../appAuth/authRoot.router"));
 const authChecker_1 = __importDefault(require("../middleware/authChecker/authChecker"));
 const adminRouter_1 = __importDefault(require("../appAdmin/adminRouter"));
+const publicRoot_router_1 = __importDefault(require("../appPublic/publicRoot.router"));
 class RootRouter {
     constructor() {
         this.v1Router = (0, express_1.Router)();
         this.authRouter = new authRoot_router_1.default();
         this.memberRouter = new memberRoot_router_1.default();
+        this.publicRouter = new publicRoot_router_1.default();
         this.adminRouter = new adminRouter_1.default();
         this.authChecker = new authChecker_1.default();
         this.callV1Router();
@@ -24,6 +26,8 @@ class RootRouter {
         this.v1Router.use("/member", this.authChecker.memberAuthChecker, this.memberRouter.router);
         // admin router
         this.v1Router.use("/admin", this.adminRouter.router);
+        // public router
+        this.v1Router.use("/public", this.publicRouter.router);
     }
 }
 exports.default = RootRouter;

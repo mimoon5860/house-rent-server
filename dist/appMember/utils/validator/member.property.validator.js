@@ -38,6 +38,8 @@ class MemberPropertyValidator {
             priceIncluded: joi_1.default.array().empty().items(this.priceIncludedSchema),
             priceExcluded: joi_1.default.array().empty().items(this.priceExcludedSchema),
             basicInfo: joi_1.default.array().items(this.basicInfoSchema).required(),
+            mobileNumber: joi_1.default.string().required(),
+            alternativeMobileNumber: joi_1.default.string().required(),
         });
         // save or post property schema
         this.changePropertyStatusSchema = joi_1.default.object({
@@ -137,7 +139,11 @@ class MemberPropertyValidator {
             formDate: joi_1.default.date().optional(),
             toDate: joi_1.default.date().optional(),
             title: joi_1.default.string().optional(),
-            deleted: joi_1.default.boolean().optional(),
+            isDeleted: joi_1.default.boolean().optional(),
+        });
+        // id in params validator
+        this.paramsIdValidatorSchema = joi_1.default.object({
+            id: joi_1.default.number().required(),
         });
     }
 }

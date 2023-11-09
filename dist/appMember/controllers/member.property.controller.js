@@ -42,7 +42,7 @@ class MemberPropertyController extends abstract_controller_1.default {
             res.status(code).json(rest);
         }));
         // upload property content controller
-        this.uploadPropertyContent = this.asyncWrapper.wrap(null, (req, res) => __awaiter(this, void 0, void 0, function* () {
+        this.uploadPropertyContent = this.asyncWrapper.wrap({ parmSchema: this.validator.paramsIdValidatorSchema }, (req, res) => __awaiter(this, void 0, void 0, function* () {
             const _c = yield this.services.uploadPropertyContenet(req), { code } = _c, rest = __rest(_c, ["code"]);
             if (rest.success) {
                 res.status(code).json(rest);
@@ -52,19 +52,25 @@ class MemberPropertyController extends abstract_controller_1.default {
             }
         }));
         //update property content controller
-        this.updatePropertyContent = this.asyncWrapper.wrap(null, (req, res) => __awaiter(this, void 0, void 0, function* () { }));
+        this.updatePropertyContent = this.asyncWrapper.wrap({ parmSchema: this.validator.paramsIdValidatorSchema }, (req, res) => __awaiter(this, void 0, void 0, function* () { }));
         // update property status controller
-        this.updatePropertyStatus = this.asyncWrapper.wrap({ bodySchema: this.validator.updatePropertyStatusSchmea }, (req, res) => __awaiter(this, void 0, void 0, function* () {
+        this.updatePropertyStatus = this.asyncWrapper.wrap({
+            bodySchema: this.validator.updatePropertyStatusSchmea,
+            parmSchema: this.validator.paramsIdValidatorSchema,
+        }, (req, res) => __awaiter(this, void 0, void 0, function* () {
             const _d = yield this.services.updatePropertyStatus(req), { code } = _d, rest = __rest(_d, ["code"]);
             res.status(code).json(rest);
         }));
         // update property controller
-        this.updateProperty = this.asyncWrapper.wrap({ bodySchema: this.validator.updatePropertySchemah }, (req, res) => __awaiter(this, void 0, void 0, function* () {
+        this.updateProperty = this.asyncWrapper.wrap({
+            bodySchema: this.validator.updatePropertySchemah,
+            parmSchema: this.validator.paramsIdValidatorSchema,
+        }, (req, res) => __awaiter(this, void 0, void 0, function* () {
             const _e = yield this.services.updateProperty(req), { code } = _e, rest = __rest(_e, ["code"]);
             res.status(code).json(rest);
         }));
         // get single property controller
-        this.getSingleProperty = this.asyncWrapper.wrap(null, (req, res) => __awaiter(this, void 0, void 0, function* () {
+        this.getSingleProperty = this.asyncWrapper.wrap({ parmSchema: this.validator.paramsIdValidatorSchema }, (req, res) => __awaiter(this, void 0, void 0, function* () {
             const _f = yield this.services.getSingleProperty(req), { code } = _f, rest = __rest(_f, ["code"]);
             res.status(code).json(rest);
         }));

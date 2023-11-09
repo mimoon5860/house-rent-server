@@ -7,6 +7,8 @@ export interface ICreatePropertyBody {
   price: number;
   priceFor: "Daily" | "Weekly" | "Monthly" | "Half_Yearly" | "Yearly";
   category: "Sublet" | "Bachelor" | "Family" | "Office" | "Hostel" | "Shop";
+  mobileNumber: string;
+  alternativeMobileNumber: string;
   priceIncluded: string[];
   basicInfo: {
     attributeId: number;
@@ -53,7 +55,7 @@ export interface IUpdatePropertyBody {
 export interface IGetPropertyQuery {
   status?: "Active" | "Expired" | "Draft" | "Inactive";
   category?: "Sublet" | "Bachelor" | "Family" | "Office" | "Hostel" | "Shop";
-  deleted?: boolean;
+  isDeleted?: boolean;
   title?: string;
   fromDate?: string;
   toDate?: string;
