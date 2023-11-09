@@ -17,6 +17,8 @@ class Wrapper extends AbstractServices {
     return async (req: Request, res: Response, next: NextFunction) => {
       try {
         const { params, query, body } = req;
+
+        console.log({ body });
         if (shema) {
           if (shema.bodySchema) {
             const validateBody = await shema.bodySchema.validateAsync(body);

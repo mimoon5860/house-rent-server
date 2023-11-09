@@ -8,6 +8,17 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __rest = (this && this.__rest) || function (s, e) {
+    var t = {};
+    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+        t[p] = s[p];
+    if (s != null && typeof Object.getOwnPropertySymbols === "function")
+        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
+            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
+                t[p[i]] = s[p[i]];
+        }
+    return t;
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 class PropertyModel {
     constructor(client) {
@@ -107,6 +118,80 @@ class PropertyModel {
     // get property
     getProperty(params) {
         return __awaiter(this, void 0, void 0, function* () {
+            const { deleted, title, fromDate, toDate, limit = 100, skip = 0 } = params, rest = __rest(params, ["deleted", "title", "fromDate", "toDate", "limit", "skip"]);
+            const where = Object.assign(Object.assign({}, rest), { isDeleted: false });
+            if (deleted) {
+                where.isDeleted = deleted;
+            }
+            if (title) {
+                where.title = {
+                    contains: title,
+                };
+            }
+            if (fromDate && toDate) {
+                const newToDate = new Date(toDate);
+                newToDate.setDate(newToDate.getDate() + 1);
+                where.createDate = {
+                    gte: new Date(fromDate),
+                    lte: newToDate,
+                };
+            }
+            const property = yield this.client.property.findMany({
+                select: {
+                    id: true,
+                    title: true,
+                    memberId: true,
+                    status: true,
+                    category: true,
+                    availableFrom: true,
+                    shortAddress: true,
+                    contents: {
+                        select: {
+                            id: true,
+                            path: true,
+                            type: true,
+                        },
+                    },
+                    area: {
+                        select: {
+                            id: true,
+                            name: true,
+                            thana: {
+                                select: {
+                                    id: true,
+                                    name: true,
+                                    district: {
+                                        select: {
+                                            id: true,
+                                            name: true,
+                                            division: {
+                                                select: {
+                                                    id: true,
+                                                    name: true,
+                                                },
+                                            },
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                    createDate: true,
+                },
+                where,
+                take: limit,
+                skip,
+                orderBy: {
+                    createDate: "desc",
+                },
+            });
+            const total = yield this.client.property.count({ where });
+            return { property, total };
+        });
+    }
+    // check property
+    checkProperty(params) {
+        return __awaiter(this, void 0, void 0, function* () {
             return yield this.client.property.findMany({
                 select: {
                     id: true,
@@ -115,6 +200,65 @@ class PropertyModel {
                     status: true,
                     category: true,
                     availableFrom: true,
+                    shortAddress: true,
+                    contents: {
+                        select: {
+                            id: true,
+                            path: true,
+                            type: true,
+                        },
+                    },
+                },
+                where: params,
+            });
+        });
+    }
+    // get single property
+    getSingleProperty(params) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return yield this.client.property.findUnique({
+                select: {
+                    id: true,
+                    memberId: true,
+                    title: true,
+                    summary: true,
+                    availableFrom: true,
+                    expiryDate: true,
+                    status: true,
+                    category: true,
+                    price: true,
+                    basicInfo: {
+                        select: {
+                            id: true,
+                            value: true,
+                            attribute: {
+                                select: {
+                                    attributeName: true,
+                                },
+                            },
+                        },
+                    },
+                    includedPrice: {
+                        select: {
+                            id: true,
+                            name: true,
+                        },
+                    },
+                    excludedPrice: {
+                        select: {
+                            id: true,
+                            name: true,
+                            price: true,
+                            pirceFor: true,
+                        },
+                    },
+                    contents: {
+                        select: {
+                            id: true,
+                            path: true,
+                            type: true,
+                        },
+                    },
                     shortAddress: true,
                     area: {
                         select: {
@@ -140,8 +284,9 @@ class PropertyModel {
                             },
                         },
                     },
+                    createDate: true,
                 },
-                where: Object.assign(Object.assign({}, params), { isDeleted: false }),
+                where: params,
             });
         });
     }

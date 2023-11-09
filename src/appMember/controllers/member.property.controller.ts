@@ -21,8 +21,11 @@ class MemberPropertyController extends AbstractController {
 
   // get property controller
   public getProperty = this.asyncWrapper.wrap(
-    null,
-    async (req: Request, res: Response) => {}
+    { querySchema: this.validator.getPropertyQueryValidatorSchema },
+    async (req: Request, res: Response) => {
+      const { code, ...rest } = await this.services.getProperty(req);
+      res.status(code).json(rest);
+    }
   );
 
   // upload property content controller
@@ -47,7 +50,7 @@ class MemberPropertyController extends AbstractController {
 
   // update property status controller
   public updatePropertyStatus = this.asyncWrapper.wrap(
-    { bodySchema: this.validator.updatePropertySchemah },
+    { bodySchema: this.validator.updatePropertyStatusSchmea },
     async (req: Request, res: Response) => {
       const { code, ...rest } = await this.services.updatePropertyStatus(req);
       res.status(code).json(rest);
@@ -66,7 +69,10 @@ class MemberPropertyController extends AbstractController {
   // get single property controller
   public getSingleProperty = this.asyncWrapper.wrap(
     null,
-    async (req: Request, res: Response) => {}
+    async (req: Request, res: Response) => {
+      const { code, ...rest } = await this.services.getSingleProperty(req);
+      res.status(code).json(rest);
+    }
   );
 }
 export default MemberPropertyController;

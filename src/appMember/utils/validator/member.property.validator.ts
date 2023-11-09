@@ -27,14 +27,14 @@ class MemberPropertyValidator {
     areaId: Joi.number().required(),
     availableFrom: Joi.date().min("now").required(),
     price: Joi.number().required(),
-    categroy: Joi.string()
+    category: Joi.string()
       .valid("Sublet", "Bachelor", "Family", "Office", "Hostel", "Shop")
       .required(),
     priceFor: Joi.string()
       .valid("Daily", "Weekly", "Monthly", "Half_Yearly", "Yearly")
       .required(),
     priceIncluded: Joi.array().empty().items(this.priceIncludedSchema),
-    priceExluded: Joi.array().empty().items(this.priceExcludedSchema),
+    priceExcluded: Joi.array().empty().items(this.priceExcludedSchema),
     basicInfo: Joi.array().items(this.basicInfoSchema).required(),
   });
 
@@ -66,6 +66,8 @@ class MemberPropertyValidator {
     division: Joi.number().integer().positive().optional(),
   });
 
+  // update property excluded added part validator schema
+
   public updatePriceExludedAddedSchemah = Joi.object({
     name: Joi.string().optional(),
     price: Joi.number().optional(),
@@ -73,7 +75,7 @@ class MemberPropertyValidator {
       .valid("Daily", "Weekly", "Monthly", "Half_Yearly", "Yearly")
       .optional(),
   });
-
+  // update property excluded updated part validator schema
   public updatePriceExludedUpdatedSchemah = Joi.object({
     id: Joi.number().required,
     name: Joi.string().optional(),
@@ -83,6 +85,7 @@ class MemberPropertyValidator {
       .optional(),
   });
 
+  // update property validator schema
   public updatePropertySchemah = Joi.object({
     title: Joi.string().optional(),
     shortAddress: Joi.string().optional(),
@@ -124,6 +127,27 @@ class MemberPropertyValidator {
         }).optional()
       ),
     }),
+  });
+
+  // Update property status validator schema
+  public updatePropertyStatusSchmea = Joi.object({
+    status: Joi.string().required().valid("Active", "Inactive"),
+  });
+
+  // Get property query validator schema
+  public getPropertyQueryValidatorSchema = Joi.object({
+    limit: Joi.number().optional(),
+    skip: Joi.number().optional(),
+    status: Joi.string()
+      .optional()
+      .valid("Draft", "Active", "Inactive", "Expired"),
+    category: Joi.string()
+      .optional()
+      .valid("Sublet", "Bachelor", "Family", "Office", "Hostel", "Shop"),
+    formDate: Joi.date().optional(),
+    toDate: Joi.date().optional(),
+    title: Joi.string().optional(),
+    deleted: Joi.boolean().optional(),
   });
 }
 

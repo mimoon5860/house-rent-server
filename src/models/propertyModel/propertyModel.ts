@@ -1,7 +1,10 @@
+import { Prisma } from "@prisma/client";
 import { TDB } from "../../utils/interfaces/common";
 import {
+  ICheckProperty,
   IGetAttributeParams,
   IGetProperty,
+  IGetSingleProperty,
   IInsertBasicAttributeValuesParams,
   IInsertPriceExcludedParams,
   IInsertPriceIncludedParams,
@@ -114,6 +117,94 @@ class PropertyModel {
 
   // get property
   public async getProperty(params: IGetProperty) {
+    const {
+      deleted,
+      title,
+      fromDate,
+      toDate,
+      limit = 100,
+      skip = 0,
+      ...rest
+    } = params;
+
+    const where: Prisma.PropertyWhereInput = { ...rest, isDeleted: false };
+
+    if (deleted) {
+      where.isDeleted = deleted;
+    }
+
+    if (title) {
+      where.title = {
+        contains: title,
+      };
+    }
+
+    if (fromDate && toDate) {
+      const newToDate = new Date(toDate);
+      newToDate.setDate(newToDate.getDate() + 1);
+      where.createDate = {
+        gte: new Date(fromDate),
+        lte: newToDate,
+      };
+    }
+
+    const property = await this.client.property.findMany({
+      select: {
+        id: true,
+        title: true,
+        memberId: true,
+        status: true,
+        category: true,
+        availableFrom: true,
+        shortAddress: true,
+        contents: {
+          select: {
+            id: true,
+            path: true,
+            type: true,
+          },
+        },
+        area: {
+          select: {
+            id: true,
+            name: true,
+            thana: {
+              select: {
+                id: true,
+                name: true,
+                district: {
+                  select: {
+                    id: true,
+                    name: true,
+                    division: {
+                      select: {
+                        id: true,
+                        name: true,
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+        createDate: true,
+      },
+      where,
+      take: limit,
+      skip,
+      orderBy: {
+        createDate: "desc",
+      },
+    });
+
+    const total = await this.client.property.count({ where });
+
+    return { property, total };
+  }
+
+  // check property
+  public async checkProperty(params: ICheckProperty) {
     return await this.client.property.findMany({
       select: {
         id: true,
@@ -122,6 +213,64 @@ class PropertyModel {
         status: true,
         category: true,
         availableFrom: true,
+        shortAddress: true,
+        contents: {
+          select: {
+            id: true,
+            path: true,
+            type: true,
+          },
+        },
+      },
+      where: params,
+    });
+  }
+
+  // get single property
+  public async getSingleProperty(params: IGetSingleProperty) {
+    return await this.client.property.findUnique({
+      select: {
+        id: true,
+        memberId: true,
+        title: true,
+        summary: true,
+        availableFrom: true,
+        expiryDate: true,
+        status: true,
+        category: true,
+        price: true,
+        basicInfo: {
+          select: {
+            id: true,
+            value: true,
+            attribute: {
+              select: {
+                attributeName: true,
+              },
+            },
+          },
+        },
+        includedPrice: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+        excludedPrice: {
+          select: {
+            id: true,
+            name: true,
+            price: true,
+            pirceFor: true,
+          },
+        },
+        contents: {
+          select: {
+            id: true,
+            path: true,
+            type: true,
+          },
+        },
         shortAddress: true,
         area: {
           select: {
@@ -147,8 +296,9 @@ class PropertyModel {
             },
           },
         },
+        createDate: true,
       },
-      where: { ...params, isDeleted: false },
+      where: params,
     });
   }
 

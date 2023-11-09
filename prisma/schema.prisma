@@ -119,7 +119,7 @@ model Property {
   availableFrom DateTime                      @db.Date
   expiryDate    DateTime?                     @db.Date
   isDeleted     Boolean                       @default(false)
-  status        PropertyStatusEnum            @default(Active)
+  status        PropertyStatusEnum            @default(Draft)
   category      CategoryEnum
   price         Float
   priceFor      PriceForEnum

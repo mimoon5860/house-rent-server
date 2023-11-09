@@ -73,8 +73,28 @@ export interface IUpdateProperty {
 }
 
 export interface IGetProperty {
+  memberId?: number;
+  status?: "Active" | "Expired" | "Draft" | "Inactive";
+  category?: "Sublet" | "Bachelor" | "Family" | "Office" | "Hostel" | "Shop";
+  deleted?: boolean;
+  title?: string;
+  fromDate?: string;
+  toDate?: string;
+  limit?: number;
+  skip?: number;
+}
+
+export interface ICheckProperty {
   id?: number;
   memberId?: number;
-  status?: "Active" | "Expired" | "Draft";
+  status?: "Active" | "Expired" | "Draft" | "Inactive";
   category?: "Sublet" | "Bachelor" | "Family" | "Office" | "Hostel" | "Shop";
+  deleted?: boolean;
+}
+
+export interface IGetSingleProperty {
+  id: number;
+  deleted?: boolean;
+  memberId?: number;
+  status?: "Active" | "Expired" | "Draft" | "Inactive";
 }

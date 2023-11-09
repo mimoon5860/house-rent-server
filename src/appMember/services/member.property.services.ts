@@ -2,9 +2,11 @@ import { Request } from "express";
 import AbstractServices from "../../abstract/abstract.service";
 import {
   ICreatePropertyBody,
+  IGetPropertyQuery,
   IUpdatePropertyBody,
 } from "../utils/types/member.property.types";
 import {
+  IGetProperty,
   IInsertBasicAttributeValuesParams,
   IInsertPriceExcludedParams,
   IInsertPriceIncludedParams,
@@ -80,8 +82,28 @@ class MemberPropertyService extends AbstractServices {
 
   // get property of member service
   public async getProperty(req: Request) {
-    const { status, title, deleted, from_date, to_date } = req.query;
+    const { limit, skip, ...rest } = req.query as IGetPropertyQuery;
     const { memberId } = req.user;
+    const filter: IGetProperty = rest;
+    filter.memberId = memberId;
+
+    if (limit) {
+      filter.limit = Number(limit);
+    }
+    if (skip) {
+      filter.skip = Number(skip);
+    }
+    const model = this.Models.propertyModel();
+
+    const propertyData = await model.getProperty(filter);
+
+    return {
+      success: true,
+      code: this.StatusCode.HTTP_OK,
+      message: this.ResMsg.HTTP_OK,
+      total: propertyData.total,
+      data: propertyData.property,
+    };
   }
 
   //  upload property content service
@@ -98,7 +120,7 @@ class MemberPropertyService extends AbstractServices {
     const { memberId } = req.user;
     const model = this.Models.propertyModel();
 
-    const checkProperty = await model.getProperty({
+    const checkProperty = await model.checkProperty({
       id: parseInt(id),
       memberId,
       status: "Draft",
@@ -109,6 +131,14 @@ class MemberPropertyService extends AbstractServices {
         success: false,
         code: this.StatusCode.HTTP_NOT_FOUND,
         message: this.ResMsg.HTTP_NOT_FOUND,
+      };
+    }
+
+    if (checkProperty[0].contents.length >= 10) {
+      return {
+        success: false,
+        code: this.StatusCode.HTTP_FORBIDDEN,
+        message: "Maximum 10 file is allowed for a property.",
       };
     }
 
@@ -159,7 +189,7 @@ class MemberPropertyService extends AbstractServices {
       };
     }
 
-    const checkProperty = await model.getProperty({
+    const checkProperty = await model.checkProperty({
       id: parseInt(id),
       memberId,
       status: "Draft",
@@ -181,7 +211,7 @@ class MemberPropertyService extends AbstractServices {
     const { status } = req.body;
     const model = this.Models.propertyModel();
 
-    const checkProperty = await model.getProperty({
+    const checkProperty = await model.checkProperty({
       id: parseInt(id),
       memberId,
     });
@@ -207,11 +237,10 @@ class MemberPropertyService extends AbstractServices {
     if (currStatus === "Draft") {
       const currentDate = new Date();
       currentDate.setMonth(currentDate.getMonth() + 1);
-      currentDate.setDate(1);
-      const formattedDate = currentDate.toISOString().slice(0, 10);
+      currentDate.setDate(currentDate.getDate());
+      const formattedDate = currentDate.toISOString();
       updatePayload.expiryDate = formattedDate;
     }
-
     await model.updateProperty(updatePayload, parseInt(id));
 
     return {
@@ -222,7 +251,31 @@ class MemberPropertyService extends AbstractServices {
   }
 
   // get single property of member service
-  public async getSingleProperty(req: Request) {}
+  public async getSingleProperty(req: Request) {
+    const { memberId } = req.user;
+    const { id } = req.params;
+    const model = this.Models.propertyModel();
+
+    const property = await model.getSingleProperty({
+      id: parseInt(id),
+      memberId,
+    });
+
+    if (property) {
+      return {
+        success: true,
+        data: property,
+        code: this.StatusCode.HTTP_OK,
+        message: this.ResMsg.HTTP_OK,
+      };
+    } else {
+      return {
+        success: false,
+        code: this.StatusCode.HTTP_NOT_FOUND,
+        message: this.ResMsg.HTTP_NOT_FOUND,
+      };
+    }
+  }
 
   // update a property service
   public async updateProperty(req: Request) {
@@ -233,6 +286,8 @@ class MemberPropertyService extends AbstractServices {
 
     return await this.prisma.$transaction(async (tx) => {
       const model = this.Models.propertyModel(tx);
+
+      const checkProperty = "First check the property";
 
       await model.updateProperty(rest, +id);
 

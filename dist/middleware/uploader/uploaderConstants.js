@@ -4,6 +4,7 @@ exports.rootFileFolder = exports.allowAllFileTypes = void 0;
 // Allow file mimetypes
 exports.allowAllFileTypes = [
     "image/jpeg",
+    "video/mp4",
     "application/octet-stream",
     "image/jpg",
     "image/JPG",

@@ -20,6 +20,7 @@ class Wrapper extends abstract_service_1.default {
         return (req, res, next) => __awaiter(this, void 0, void 0, function* () {
             try {
                 const { params, query, body } = req;
+                console.log({ body });
                 if (shema) {
                     if (shema.bodySchema) {
                         const validateBody = yield shema.bodySchema.validateAsync(body);

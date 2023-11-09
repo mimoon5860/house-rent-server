@@ -1,6 +1,7 @@
 // Allow file mimetypes
 export const allowAllFileTypes: string[] = [
   "image/jpeg",
+  "video/mp4",
   "application/octet-stream",
   "image/jpg",
   "image/JPG",

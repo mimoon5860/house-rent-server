@@ -78,8 +78,25 @@ class MemberPropertyService extends abstract_service_1.default {
     // get property of member service
     getProperty(req) {
         return __awaiter(this, void 0, void 0, function* () {
-            const { status, title, deleted, from_date, to_date } = req.query;
+            const _a = req.query, { limit, skip } = _a, rest = __rest(_a, ["limit", "skip"]);
             const { memberId } = req.user;
+            const filter = rest;
+            filter.memberId = memberId;
+            if (limit) {
+                filter.limit = Number(limit);
+            }
+            if (skip) {
+                filter.skip = Number(skip);
+            }
+            const model = this.Models.propertyModel();
+            const propertyData = yield model.getProperty(filter);
+            return {
+                success: true,
+                code: this.StatusCode.HTTP_OK,
+                message: this.ResMsg.HTTP_OK,
+                total: propertyData.total,
+                data: propertyData.property,
+            };
         });
     }
     //  upload property content service
@@ -96,7 +113,7 @@ class MemberPropertyService extends abstract_service_1.default {
             const { id } = req.params;
             const { memberId } = req.user;
             const model = this.Models.propertyModel();
-            const checkProperty = yield model.getProperty({
+            const checkProperty = yield model.checkProperty({
                 id: parseInt(id),
                 memberId,
                 status: "Draft",
@@ -106,6 +123,13 @@ class MemberPropertyService extends abstract_service_1.default {
                     success: false,
                     code: this.StatusCode.HTTP_NOT_FOUND,
                     message: this.ResMsg.HTTP_NOT_FOUND,
+                };
+            }
+            if (checkProperty[0].contents.length >= 10) {
+                return {
+                    success: false,
+                    code: this.StatusCode.HTTP_FORBIDDEN,
+                    message: "Maximum 10 file is allowed for a property.",
                 };
             }
             const payload = [];
@@ -149,7 +173,7 @@ class MemberPropertyService extends abstract_service_1.default {
                     message: "File upload limit is 10",
                 };
             }
-            const checkProperty = yield model.getProperty({
+            const checkProperty = yield model.checkProperty({
                 id: parseInt(id),
                 memberId,
                 status: "Draft",
@@ -170,7 +194,7 @@ class MemberPropertyService extends abstract_service_1.default {
             const { memberId } = req.user;
             const { status } = req.body;
             const model = this.Models.propertyModel();
-            const checkProperty = yield model.getProperty({
+            const checkProperty = yield model.checkProperty({
                 id: parseInt(id),
                 memberId,
             });
@@ -193,8 +217,8 @@ class MemberPropertyService extends abstract_service_1.default {
             if (currStatus === "Draft") {
                 const currentDate = new Date();
                 currentDate.setMonth(currentDate.getMonth() + 1);
-                currentDate.setDate(1);
-                const formattedDate = currentDate.toISOString().slice(0, 10);
+                currentDate.setDate(currentDate.getDate());
+                const formattedDate = currentDate.toISOString();
                 updatePayload.expiryDate = formattedDate;
             }
             yield model.updateProperty(updatePayload, parseInt(id));
@@ -207,7 +231,30 @@ class MemberPropertyService extends abstract_service_1.default {
     }
     // get single property of member service
     getSingleProperty(req) {
-        return __awaiter(this, void 0, void 0, function* () { });
+        return __awaiter(this, void 0, void 0, function* () {
+            const { memberId } = req.user;
+            const { id } = req.params;
+            const model = this.Models.propertyModel();
+            const property = yield model.getSingleProperty({
+                id: parseInt(id),
+                memberId,
+            });
+            if (property) {
+                return {
+                    success: true,
+                    data: property,
+                    code: this.StatusCode.HTTP_OK,
+                    message: this.ResMsg.HTTP_OK,
+                };
+            }
+            else {
+                return {
+                    success: false,
+                    code: this.StatusCode.HTTP_NOT_FOUND,
+                    message: this.ResMsg.HTTP_NOT_FOUND,
+                };
+            }
+        });
     }
     // update a property service
     updateProperty(req) {
@@ -217,6 +264,7 @@ class MemberPropertyService extends abstract_service_1.default {
             return yield this.prisma.$transaction((tx) => __awaiter(this, void 0, void 0, function* () {
                 var _b, _c, _d, _e, _f, _g, _h, _j, _k, _l;
                 const model = this.Models.propertyModel(tx);
+                const checkProperty = "First check the property";
                 yield model.updateProperty(rest, +id);
                 // balic info
                 if ((_b = basicInfo === null || basicInfo === void 0 ? void 0 : basicInfo.added) === null || _b === void 0 ? void 0 : _b.length) {

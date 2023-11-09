@@ -29,14 +29,14 @@ class MemberPropertyValidator {
             areaId: joi_1.default.number().required(),
             availableFrom: joi_1.default.date().min("now").required(),
             price: joi_1.default.number().required(),
-            categroy: joi_1.default.string()
+            category: joi_1.default.string()
                 .valid("Sublet", "Bachelor", "Family", "Office", "Hostel", "Shop")
                 .required(),
             priceFor: joi_1.default.string()
                 .valid("Daily", "Weekly", "Monthly", "Half_Yearly", "Yearly")
                 .required(),
             priceIncluded: joi_1.default.array().empty().items(this.priceIncludedSchema),
-            priceExluded: joi_1.default.array().empty().items(this.priceExcludedSchema),
+            priceExcluded: joi_1.default.array().empty().items(this.priceExcludedSchema),
             basicInfo: joi_1.default.array().items(this.basicInfoSchema).required(),
         });
         // save or post property schema
@@ -64,6 +64,7 @@ class MemberPropertyValidator {
             district: joi_1.default.number().integer().positive().optional(),
             division: joi_1.default.number().integer().positive().optional(),
         });
+        // update property excluded added part validator schema
         this.updatePriceExludedAddedSchemah = joi_1.default.object({
             name: joi_1.default.string().optional(),
             price: joi_1.default.number().optional(),
@@ -71,6 +72,7 @@ class MemberPropertyValidator {
                 .valid("Daily", "Weekly", "Monthly", "Half_Yearly", "Yearly")
                 .optional(),
         });
+        // update property excluded updated part validator schema
         this.updatePriceExludedUpdatedSchemah = joi_1.default.object({
             id: joi_1.default.number().required,
             name: joi_1.default.string().optional(),
@@ -79,6 +81,7 @@ class MemberPropertyValidator {
                 .valid("Daily", "Weekly", "Monthly", "Half_Yearly", "Yearly")
                 .optional(),
         });
+        // update property validator schema
         this.updatePropertySchemah = joi_1.default.object({
             title: joi_1.default.string().optional(),
             shortAddress: joi_1.default.string().optional(),
@@ -116,6 +119,25 @@ class MemberPropertyValidator {
                     value: joi_1.default.string().required(),
                 }).optional()),
             }),
+        });
+        // Update property status validator schema
+        this.updatePropertyStatusSchmea = joi_1.default.object({
+            status: joi_1.default.string().required().valid("Active", "Inactive"),
+        });
+        // Get property query validator schema
+        this.getPropertyQueryValidatorSchema = joi_1.default.object({
+            limit: joi_1.default.number().optional(),
+            skip: joi_1.default.number().optional(),
+            status: joi_1.default.string()
+                .optional()
+                .valid("Draft", "Active", "Inactive", "Expired"),
+            category: joi_1.default.string()
+                .optional()
+                .valid("Sublet", "Bachelor", "Family", "Office", "Hostel", "Shop"),
+            formDate: joi_1.default.date().optional(),
+            toDate: joi_1.default.date().optional(),
+            title: joi_1.default.string().optional(),
+            deleted: joi_1.default.boolean().optional(),
         });
     }
 }

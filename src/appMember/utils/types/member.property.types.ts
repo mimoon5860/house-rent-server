@@ -1,4 +1,3 @@
-import { IUpdateProperty } from "./../../../utils/interfaces/propertyTypes";
 export interface ICreatePropertyBody {
   title: string;
   shortAddress: string;
@@ -49,4 +48,15 @@ export interface IUpdatePropertyBody {
     deleted?: number[];
     updated?: { id: number; value: string }[];
   };
+}
+
+export interface IGetPropertyQuery {
+  status?: "Active" | "Expired" | "Draft" | "Inactive";
+  category?: "Sublet" | "Bachelor" | "Family" | "Office" | "Hostel" | "Shop";
+  deleted?: boolean;
+  title?: string;
+  fromDate?: string;
+  toDate?: string;
+  limit?: string;
+  skip?: string;
 }
