@@ -7,6 +7,13 @@ const abstract_router_1 = __importDefault(require("../../abstract/abstract.route
 class PubliOTPRouter extends abstract_router_1.default {
     constructor() {
         super();
+        this.callRouter();
+    }
+    callRouter() {
+        // send otp
+        this.router.route("/send");
+        // match otp
+        this.router.route("/match");
     }
 }
 exports.default = PubliOTPRouter;

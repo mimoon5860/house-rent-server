@@ -1,6 +1,7 @@
 import UserModel from "./userModel/userModel";
 import { TDB } from "../utils/interfaces/common";
 import PropertyModel from "./propertyModel/propertyModel";
+import OtpModel from "./otpModel/otpModel";
 
 class Models {
   private client: TDB;
@@ -15,6 +16,11 @@ class Models {
   // property model
   public propertyModel(tx?: TDB) {
     return new PropertyModel(tx || this.client);
+  }
+
+  // otp model
+  public otpModel(tx?: TDB) {
+    return new OtpModel(tx || this.client);
   }
 }
 export default Models;

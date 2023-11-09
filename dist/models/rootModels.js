@@ -5,6 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const userModel_1 = __importDefault(require("./userModel/userModel"));
 const propertyModel_1 = __importDefault(require("./propertyModel/propertyModel"));
+const otpModel_1 = __importDefault(require("./otpModel/otpModel"));
 class Models {
     constructor(client) {
         this.client = client;
@@ -16,6 +17,10 @@ class Models {
     // property model
     propertyModel(tx) {
         return new propertyModel_1.default(tx || this.client);
+    }
+    // otp model
+    otpModel(tx) {
+        return new otpModel_1.default(tx || this.client);
     }
 }
 exports.default = Models;
