@@ -66,6 +66,20 @@ class MemberAuthServices extends AbstractServices {
         message: "Registration successful",
         code: this.StatusCode.HTTP_SUCCESSFUL,
         token,
+        data: {
+          userId: newUser.id,
+          memberId: newMember.id,
+          userName,
+          email,
+          firstName,
+          lastName,
+          photo,
+          isVerified: false,
+          mobileNumber,
+          status: "Active",
+          address: null,
+          area: null,
+        },
       };
     });
   }
@@ -91,6 +105,9 @@ class MemberAuthServices extends AbstractServices {
       firstName,
       lastName,
       photo,
+      userName,
+      mobileNumber,
+      status,
     } = user;
 
     const match = await Lib.compare(password, hashedPass);
@@ -106,7 +123,7 @@ class MemberAuthServices extends AbstractServices {
     const tokenData = {
       userId,
       memberId,
-      userName: user.userName,
+      userName,
       email,
       firstName,
       lastName,
@@ -120,6 +137,20 @@ class MemberAuthServices extends AbstractServices {
       message: "Login successful",
       token,
       code: this.StatusCode.HTTP_SUCCESSFUL,
+      data: {
+        userId,
+        memberId,
+        userName,
+        email,
+        firstName,
+        lastName,
+        photo,
+        isVerified: false,
+        mobileNumber,
+        status,
+        address: member.address,
+        area: member.area,
+      },
     };
   }
 }

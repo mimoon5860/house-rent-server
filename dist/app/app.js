@@ -8,6 +8,7 @@ const constants_1 = require("../utils/miscellaneous/constants");
 const customEror_1 = __importDefault(require("../utils/lib/customEror"));
 const morgan_1 = __importDefault(require("morgan"));
 const cors_1 = __importDefault(require("cors"));
+const path_1 = __importDefault(require("path"));
 const router_1 = __importDefault(require("./router"));
 const errorHandler_1 = __importDefault(require("../middleware/errorHandler/errorHandler"));
 class App {
@@ -17,6 +18,7 @@ class App {
         this.port = port;
         this.initMiddleware();
         this.initRouters();
+        this.fileSender();
         this.notFoundRouter();
         this.errorHandle();
     }
@@ -38,7 +40,22 @@ class App {
         this.app.get("/", (_req, res) => {
             res.send(`Server is running...🚀`);
         });
+        this.app.get("/api", (_req, res) => {
+            res.send(`Server API is active🚀`);
+        });
         this.app.use("/api/v1", new router_1.default().v1Router);
+    }
+    fileSender() {
+        this.app.get("/api/assets", (req, res) => {
+            const file = req.query;
+            if (file.path) {
+                const filePath = path_1.default.resolve(`${__dirname}/../../uploads/${file.path}`);
+                res.sendFile(filePath);
+            }
+            else {
+                res.status(404).send("Invalid path");
+            }
+        });
     }
     // not found router
     notFoundRouter() {

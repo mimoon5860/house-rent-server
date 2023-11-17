@@ -66,6 +66,20 @@ class MemberAuthServices extends abstract_service_1.default {
                     message: "Registration successful",
                     code: this.StatusCode.HTTP_SUCCESSFUL,
                     token,
+                    data: {
+                        userId: newUser.id,
+                        memberId: newMember.id,
+                        userName,
+                        email,
+                        firstName,
+                        lastName,
+                        photo,
+                        isVerified: false,
+                        mobileNumber,
+                        status: "Active",
+                        address: null,
+                        area: null,
+                    },
                 };
             }));
         });
@@ -84,7 +98,7 @@ class MemberAuthServices extends abstract_service_1.default {
                 };
             }
             const { user, id: memberId } = member;
-            const { password: hashedPass, id: userId, firstName, lastName, photo, } = user;
+            const { password: hashedPass, id: userId, firstName, lastName, photo, userName, mobileNumber, status, } = user;
             const match = yield lib_1.default.compare(password, hashedPass);
             if (!match) {
                 return {
@@ -96,7 +110,7 @@ class MemberAuthServices extends abstract_service_1.default {
             const tokenData = {
                 userId,
                 memberId,
-                userName: user.userName,
+                userName,
                 email,
                 firstName,
                 lastName,
@@ -108,6 +122,20 @@ class MemberAuthServices extends abstract_service_1.default {
                 message: "Login successful",
                 token,
                 code: this.StatusCode.HTTP_SUCCESSFUL,
+                data: {
+                    userId,
+                    memberId,
+                    userName,
+                    email,
+                    firstName,
+                    lastName,
+                    photo,
+                    isVerified: false,
+                    mobileNumber,
+                    status,
+                    address: member.address,
+                    area: member.area,
+                },
             };
         });
     }

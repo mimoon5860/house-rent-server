@@ -3,6 +3,7 @@ import { origin } from "../utils/miscellaneous/constants";
 import CustomError from "../utils/lib/customEror";
 import morgan from "morgan";
 import cors from "cors";
+import path from "path";
 import RootRouter from "./router";
 import ErrorHandler from "../middleware/errorHandler/errorHandler";
 
@@ -16,6 +17,7 @@ class App {
     this.port = port;
     this.initMiddleware();
     this.initRouters();
+    this.fileSender();
     this.notFoundRouter();
     this.errorHandle();
   }
@@ -40,8 +42,25 @@ class App {
     this.app.get("/", (_req: Request, res: Response) => {
       res.send(`Server is running...🚀`);
     });
+    this.app.get("/api", (_req: Request, res: Response) => {
+      res.send(`Server API is active🚀`);
+    });
 
     this.app.use("/api/v1", new RootRouter().v1Router);
+  }
+
+  private fileSender() {
+    this.app.get("/api/assets", (req: Request, res: Response) => {
+      const file = req.query as { path: string };
+      if (file.path) {
+        const filePath = path.resolve(
+          `${__dirname}/../../uploads/${file.path}`
+        );
+        res.sendFile(filePath);
+      } else {
+        res.status(404).send("Invalid path");
+      }
+    });
   }
 
   // not found router
