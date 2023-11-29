@@ -51,7 +51,7 @@ class MemberPropertyService extends AbstractServices {
         propertyId: newProperty.id,
       };
 
-      await model.insertBasicAttributeValues(attributePayload);
+      await model.insertBasicInfo(attributePayload);
 
       if (priceIncluded.length) {
         const includePayload: IInsertPriceIncludedParams[] = priceIncluded.map(
@@ -301,33 +301,8 @@ class MemberPropertyService extends AbstractServices {
 
       await model.updateProperty(rest, +id);
 
-      // balic info
-      if (basicInfo?.added?.length) {
-        const attributePayload: IInsertBasicAttributeValuesParams[] =
-          basicInfo.added.map((item) => {
-            return {
-              propertyId: parseInt(id),
-              attributeId: item.attributeId,
-              value: item.value,
-            };
-          });
-
-        await model.insertBasicAttributeValues(attributePayload);
-      }
-
-      if (basicInfo?.updated?.length) {
-        basicInfo.updated.map(async (item) => {
-          await model.updateBasicAttributeValue(
-            { value: item.value as string },
-            item.id
-          );
-        });
-      }
-
-      if (basicInfo?.deleted?.length) {
-        basicInfo.deleted.map(
-          async (id) => await model.deleteBasicAttributeValue(id)
-        );
+      if (basicInfo) {
+        await model.updateBasicInfo(basicInfo, parseInt(id));
       }
 
       // Price Exluded

@@ -13,21 +13,6 @@ class MemberPropertyValidator {
       .required(),
   });
 
-  // basic info of property schema
-  private basicInfoSchema = Joi.object({
-    availableFrom: Joi.date().required(),
-    propertyType: Joi.string()
-      .valid("Room", "Flat", "Seat", "House", "Apartment", "Floor")
-      .required(),
-    bedRoom: Joi.number(),
-    bathRoom: Joi.number(),
-    balcony: Joi.number(),
-    floor: Joi.number(),
-    gender: Joi.string().valid("Male", "Female", "Anyone"),
-    size: Joi.number(),
-    parking: Joi.number(),
-  });
-
   // create property validator
   public createPropertySchema = Joi.object({
     title: Joi.string().required(),
@@ -44,7 +29,21 @@ class MemberPropertyValidator {
       .required(),
     priceIncluded: Joi.array().empty().items(this.priceIncludedSchema),
     priceExcluded: Joi.array().empty().items(this.priceExcludedSchema),
-    basicInfo: Joi.array().items(this.basicInfoSchema).required(),
+    basicInfo: Joi.object()
+      .keys({
+        availableFrom: Joi.date().required(),
+        propertyType: Joi.string()
+          .valid("Room", "Flat", "Seat", "House", "Apartment", "Floor")
+          .required(),
+        bedRoom: Joi.number().optional(),
+        bathRoom: Joi.number().optional(),
+        balcony: Joi.number().optional(),
+        floor: Joi.number().optional(),
+        gender: Joi.string().valid("Male", "Female", "Anyone").optional(),
+        size: Joi.number().optional(),
+        parking: Joi.number().optional(),
+      })
+      .required(),
     mobileNumber: Joi.string().required(),
     alternativeMobileNumber: Joi.string().required(),
   });
@@ -121,23 +120,21 @@ class MemberPropertyValidator {
         .items(this.updatePriceExludedUpdatedSchemah)
         .optional(),
     }).optional(),
-    basicInfo: Joi.object({
-      added: Joi.array()
-        .items(
-          Joi.object({
-            attributeId: Joi.number().required(),
-            value: Joi.string().required(),
-          })
-        )
-        .optional(),
-      deleted: Joi.array().items(Joi.number().required()).optional(),
-      updated: Joi.array().items(
-        Joi.object({
-          id: Joi.number().required(),
-          value: Joi.string().required(),
-        }).optional()
-      ),
-    }),
+    basicInfo: Joi.object()
+      .keys({
+        availableFrom: Joi.date().optional(),
+        propertyType: Joi.string()
+          .valid("Room", "Flat", "Seat", "House", "Apartment", "Floor")
+          .optional(),
+        bedRoom: Joi.number().optional(),
+        bathRoom: Joi.number().optional(),
+        balcony: Joi.number().optional(),
+        floor: Joi.number().optional(),
+        gender: Joi.string().valid("Male", "Female", "Anyone").optional(),
+        size: Joi.number().optional(),
+        parking: Joi.number().optional(),
+      })
+      .optional(),
   });
 
   // Update property status validator schema

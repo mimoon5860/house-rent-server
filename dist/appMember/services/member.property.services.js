@@ -41,14 +41,8 @@ class MemberPropertyService extends abstract_service_1.default {
                     { contact: alternativeMobileNumber, propertyId: newProperty.id },
                 ];
                 yield model.insertPropertyContact(contactBody);
-                const attributePayload = basicInfo.map((item) => {
-                    return {
-                        propertyId: newProperty.id,
-                        attributeId: item.attributeId,
-                        value: item.value,
-                    };
-                });
-                yield model.insertBasicAttributeValues(attributePayload);
+                const attributePayload = Object.assign(Object.assign({}, basicInfo), { propertyId: newProperty.id });
+                yield model.insertBasicInfo(attributePayload);
                 if (priceIncluded.length) {
                     const includePayload = priceIncluded.map((item) => {
                         return {
@@ -267,31 +261,15 @@ class MemberPropertyService extends abstract_service_1.default {
             const { id } = req.params;
             const _a = req.body, { priceIncluded, priceExluded, basicInfo } = _a, rest = __rest(_a, ["priceIncluded", "priceExluded", "basicInfo"]);
             return yield this.prisma.$transaction((tx) => __awaiter(this, void 0, void 0, function* () {
-                var _b, _c, _d, _e, _f, _g, _h, _j, _k, _l;
+                var _b, _c, _d, _e, _f, _g, _h;
                 const model = this.Models.propertyModel(tx);
                 const checkProperty = "First check the property";
                 yield model.updateProperty(rest, +id);
-                // balic info
-                if ((_b = basicInfo === null || basicInfo === void 0 ? void 0 : basicInfo.added) === null || _b === void 0 ? void 0 : _b.length) {
-                    const attributePayload = basicInfo.added.map((item) => {
-                        return {
-                            propertyId: parseInt(id),
-                            attributeId: item.attributeId,
-                            value: item.value,
-                        };
-                    });
-                    yield model.insertBasicAttributeValues(attributePayload);
-                }
-                if ((_c = basicInfo === null || basicInfo === void 0 ? void 0 : basicInfo.updated) === null || _c === void 0 ? void 0 : _c.length) {
-                    basicInfo.updated.map((item) => __awaiter(this, void 0, void 0, function* () {
-                        yield model.updateBasicAttributeValue({ value: item.value }, item.id);
-                    }));
-                }
-                if ((_d = basicInfo === null || basicInfo === void 0 ? void 0 : basicInfo.deleted) === null || _d === void 0 ? void 0 : _d.length) {
-                    basicInfo.deleted.map((id) => __awaiter(this, void 0, void 0, function* () { return yield model.deleteBasicAttributeValue(id); }));
+                if (basicInfo) {
+                    yield model.updateBasicInfo(basicInfo, parseInt(id));
                 }
                 // Price Exluded
-                if ((_e = priceExluded === null || priceExluded === void 0 ? void 0 : priceExluded.added) === null || _e === void 0 ? void 0 : _e.length) {
+                if ((_b = priceExluded === null || priceExluded === void 0 ? void 0 : priceExluded.added) === null || _b === void 0 ? void 0 : _b.length) {
                     const excludePayload = priceExluded === null || priceExluded === void 0 ? void 0 : priceExluded.added.map((item) => {
                         return {
                             name: item.name,
@@ -302,16 +280,16 @@ class MemberPropertyService extends abstract_service_1.default {
                     });
                     yield model.insertPriceExcluded(excludePayload);
                 }
-                if ((_f = priceExluded === null || priceExluded === void 0 ? void 0 : priceExluded.updated) === null || _f === void 0 ? void 0 : _f.length) {
-                    (_g = priceExluded.updated) === null || _g === void 0 ? void 0 : _g.map((item) => __awaiter(this, void 0, void 0, function* () {
+                if ((_c = priceExluded === null || priceExluded === void 0 ? void 0 : priceExluded.updated) === null || _c === void 0 ? void 0 : _c.length) {
+                    (_d = priceExluded.updated) === null || _d === void 0 ? void 0 : _d.map((item) => __awaiter(this, void 0, void 0, function* () {
                         yield model.updatePriceExclue({ name: item === null || item === void 0 ? void 0 : item.name, price: item === null || item === void 0 ? void 0 : item.price, pirceFor: item === null || item === void 0 ? void 0 : item.priceFor }, item.id);
                     }));
                 }
-                if ((_h = priceExluded === null || priceExluded === void 0 ? void 0 : priceExluded.deleted) === null || _h === void 0 ? void 0 : _h.length) {
-                    (_j = priceExluded === null || priceExluded === void 0 ? void 0 : priceExluded.deleted) === null || _j === void 0 ? void 0 : _j.map((id) => __awaiter(this, void 0, void 0, function* () { return yield model.deletePriceExclue(id); }));
+                if ((_e = priceExluded === null || priceExluded === void 0 ? void 0 : priceExluded.deleted) === null || _e === void 0 ? void 0 : _e.length) {
+                    (_f = priceExluded === null || priceExluded === void 0 ? void 0 : priceExluded.deleted) === null || _f === void 0 ? void 0 : _f.map((id) => __awaiter(this, void 0, void 0, function* () { return yield model.deletePriceExclue(id); }));
                 }
                 // Price Included
-                if ((_k = priceIncluded === null || priceIncluded === void 0 ? void 0 : priceIncluded.added) === null || _k === void 0 ? void 0 : _k.length) {
+                if ((_g = priceIncluded === null || priceIncluded === void 0 ? void 0 : priceIncluded.added) === null || _g === void 0 ? void 0 : _g.length) {
                     const includePayload = priceIncluded === null || priceIncluded === void 0 ? void 0 : priceIncluded.added.map((item) => {
                         return {
                             name: item,
@@ -320,7 +298,7 @@ class MemberPropertyService extends abstract_service_1.default {
                     });
                     yield model.insertPriceIncluded(includePayload);
                 }
-                if ((_l = priceIncluded === null || priceIncluded === void 0 ? void 0 : priceIncluded.deleted) === null || _l === void 0 ? void 0 : _l.length) {
+                if ((_h = priceIncluded === null || priceIncluded === void 0 ? void 0 : priceIncluded.deleted) === null || _h === void 0 ? void 0 : _h.length) {
                     priceIncluded.deleted.map((id) => __awaiter(this, void 0, void 0, function* () { return yield model.deletePriceIncluded(id); }));
                 }
                 return {

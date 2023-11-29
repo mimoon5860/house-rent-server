@@ -9,6 +9,7 @@ interface ICreateBasicInfoBody {
   size?: number;
   parking?: number;
 }
+
 export interface ICreatePropertyBody {
   title: string;
   shortAddress: string;
@@ -27,6 +28,18 @@ export interface ICreatePropertyBody {
     price: number;
     priceFor: "Daily" | "Weekly" | "Monthly" | "Half_Yearly" | "Yearly";
   }[];
+}
+
+interface IUpdateBasicInfoBody {
+  availableFrom?: string;
+  propertyType?: "Room" | "Flat" | "Seat" | "House" | "Apartment" | "Floor";
+  bedRoom?: number;
+  bathRoom?: number;
+  balcony?: number;
+  floor?: number;
+  gender?: "Male" | "Female" | "Anyone";
+  size?: number;
+  parking?: number;
 }
 
 export interface IUpdatePropertyBody {
@@ -53,11 +66,7 @@ export interface IUpdatePropertyBody {
       priceFor: "Daily" | "Weekly" | "Monthly" | "Half_Yearly" | "Yearly";
     }[];
   };
-  basicInfo?: {
-    added?: { attributeId: number; value: string }[];
-    deleted?: number[];
-    updated?: { id: number; value: string }[];
-  };
+  basicInfo?: IUpdateBasicInfoBody;
 }
 
 export interface IGetPropertyQuery {

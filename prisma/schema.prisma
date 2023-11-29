@@ -174,14 +174,14 @@ model PriceExcluded {
 model PropertyBasicInfo {
   id          Int                    @id @default(autoincrement())
   availableFrom DateTime             @db.Date
-  propertyType  CategoryEnum 
-  bedRoom Int
-  bathRoom Int
-  balcony Int
-  floor Int
-  gender GenderType
-  size Float
-  parking Int
+  propertyType  TypeEnum 
+  bedRoom Int?
+  bathRoom Int?
+  balcony Int?
+  floor Int?
+  gender GenderType?
+  size Float?
+  parking Int?
   propertyId  Int @unique
   property    Property               @relation(fields: [propertyId], references: [id])
 }

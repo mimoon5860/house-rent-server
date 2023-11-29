@@ -11,12 +11,6 @@ class AdminPropertyRouter extends abstract_router_1.default {
         this.controller = new admin_property_controller_1.default();
         this.callRouter();
     }
-    callRouter() {
-        // create property attribute router
-        this.router
-            .route("/basic-attribute")
-            .post(this.controller.createBasicAttribute)
-            .get(this.controller.getBasicAttribute);
-    }
+    callRouter() { }
 }
 exports.default = AdminPropertyRouter;

@@ -16,11 +16,6 @@ class MemberPropertyValidator {
                 .valid("Daily", "Weekly", "Monthly", "Half_Yearly", "Yearly")
                 .required(),
         });
-        // basic info of property schema
-        this.basicInfoSchema = joi_1.default.object({
-            attributeId: joi_1.default.number().required(),
-            value: joi_1.default.string().required(),
-        });
         // create property validator
         this.createPropertySchema = joi_1.default.object({
             title: joi_1.default.string().required(),
@@ -37,7 +32,21 @@ class MemberPropertyValidator {
                 .required(),
             priceIncluded: joi_1.default.array().empty().items(this.priceIncludedSchema),
             priceExcluded: joi_1.default.array().empty().items(this.priceExcludedSchema),
-            basicInfo: joi_1.default.array().items(this.basicInfoSchema).required(),
+            basicInfo: joi_1.default.object()
+                .keys({
+                availableFrom: joi_1.default.date().required(),
+                propertyType: joi_1.default.string()
+                    .valid("Room", "Flat", "Seat", "House", "Apartment", "Floor")
+                    .required(),
+                bedRoom: joi_1.default.number().optional(),
+                bathRoom: joi_1.default.number().optional(),
+                balcony: joi_1.default.number().optional(),
+                floor: joi_1.default.number().optional(),
+                gender: joi_1.default.string().valid("Male", "Female", "Anyone").optional(),
+                size: joi_1.default.number().optional(),
+                parking: joi_1.default.number().optional(),
+            })
+                .required(),
             mobileNumber: joi_1.default.string().required(),
             alternativeMobileNumber: joi_1.default.string().required(),
         });
@@ -108,19 +117,21 @@ class MemberPropertyValidator {
                     .items(this.updatePriceExludedUpdatedSchemah)
                     .optional(),
             }).optional(),
-            basicInfo: joi_1.default.object({
-                added: joi_1.default.array()
-                    .items(joi_1.default.object({
-                    attributeId: joi_1.default.number().required(),
-                    value: joi_1.default.string().required(),
-                }))
+            basicInfo: joi_1.default.object()
+                .keys({
+                availableFrom: joi_1.default.date().optional(),
+                propertyType: joi_1.default.string()
+                    .valid("Room", "Flat", "Seat", "House", "Apartment", "Floor")
                     .optional(),
-                deleted: joi_1.default.array().items(joi_1.default.number().required()).optional(),
-                updated: joi_1.default.array().items(joi_1.default.object({
-                    id: joi_1.default.number().required(),
-                    value: joi_1.default.string().required(),
-                }).optional()),
-            }),
+                bedRoom: joi_1.default.number().optional(),
+                bathRoom: joi_1.default.number().optional(),
+                balcony: joi_1.default.number().optional(),
+                floor: joi_1.default.number().optional(),
+                gender: joi_1.default.string().valid("Male", "Female", "Anyone").optional(),
+                size: joi_1.default.number().optional(),
+                parking: joi_1.default.number().optional(),
+            })
+                .optional(),
         });
         // Update property status validator schema
         this.updatePropertyStatusSchmea = joi_1.default.object({

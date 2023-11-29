@@ -2,17 +2,15 @@ import { Prisma } from "@prisma/client";
 import { TDB } from "../../utils/interfaces/common";
 import {
   ICheckProperty,
-  IGetAttributeParams,
   IGetProperty,
   IGetSingleProperty,
-  IInsertBasicAttributeValuesParams,
+  IInsertBasicInfoParams,
   IInsertPriceExcludedParams,
   IInsertPriceIncludedParams,
   IInsertProperty,
-  IInsertPropertyBasicAttributeParams,
   IInsertPropertyContact,
   IInsertPropertyContentParams,
-  IUpdateBasicAttributeValuesParams,
+  IUpdateBasicInfoParams,
   IUpdatePriceExcludedParams,
   IUpdateProperty,
 } from "../../utils/interfaces/propertyTypes";
@@ -21,30 +19,6 @@ class PropertyModel {
   private client: TDB;
   constructor(client: TDB) {
     this.client = client;
-  }
-
-  // insert property basic attribute
-  public async insertBasicAttribute(
-    params:
-      | IInsertPropertyBasicAttributeParams
-      | IInsertPropertyBasicAttributeParams[]
-  ) {
-    if (Array.isArray(params)) {
-      return await this.client.propertyBasicAttribute.createMany({
-        data: params,
-      });
-    } else {
-      return await this.client.propertyBasicAttribute.create({
-        data: params,
-      });
-    }
-  }
-
-  // get property basic attributes
-  public async getBasicAttribute(params: IGetAttributeParams) {
-    return await this.client.propertyBasicAttribute.findMany({
-      where: params,
-    });
   }
 
   // insert price included
@@ -72,23 +46,6 @@ class PropertyModel {
       });
     } else {
       return await this.client.priceExcluded.create({
-        data: params,
-      });
-    }
-  }
-
-  // insert basic attribute values
-  public async insertBasicAttributeValues(
-    params:
-      | IInsertBasicAttributeValuesParams
-      | IInsertBasicAttributeValuesParams[]
-  ) {
-    if (Array.isArray(params)) {
-      return await this.client.propertyBasicAttributeValue.createMany({
-        data: params,
-      });
-    } else {
-      return await this.client.propertyBasicAttributeValue.create({
         data: params,
       });
     }
@@ -288,12 +245,15 @@ class PropertyModel {
         basicInfo: {
           select: {
             id: true,
-            value: true,
-            attribute: {
-              select: {
-                attributeName: true,
-              },
-            },
+            availableFrom: true,
+            balcony: true,
+            bathRoom: true,
+            bedRoom: true,
+            floor: true,
+            gender: true,
+            parking: true,
+            propertyType: true,
+            size: true,
           },
         },
         includedPrice: {
@@ -358,21 +318,18 @@ class PropertyModel {
     });
   }
 
-  // update basic attribute value
-  public async updateBasicAttributeValue(
-    payload: IUpdateBasicAttributeValuesParams,
-    id: number
-  ) {
-    return await this.client.propertyBasicAttributeValue.update({
+  // update basic info
+  public async updateBasicInfo(payload: IUpdateBasicInfoParams, id: number) {
+    return await this.client.propertyBasicInfo.update({
       data: payload,
       where: { id },
     });
   }
 
-  // delete basic attribute vlaue
-  public async deleteBasicAttributeValue(id: number) {
-    return await this.client.propertyBasicAttributeValue.deleteMany({
-      where: { id },
+  // insert basic info
+  public async insertBasicInfo(payload: IInsertBasicInfoParams) {
+    return await this.client.propertyBasicInfo.create({
+      data: payload,
     });
   }
 

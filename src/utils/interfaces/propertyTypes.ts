@@ -1,9 +1,4 @@
-// insert property basic attribute params
-export interface IInsertPropertyBasicAttributeParams {
-  attributeName: string;
-}
-
-// insert property basic attribute values
+// insert property basic info params
 export interface IInsertBasicInfoParams {
   propertyId: number;
   availableFrom: string;
@@ -16,14 +11,18 @@ export interface IInsertBasicInfoParams {
   size?: number;
   parking?: number;
 }
-export interface IUpdateBasicAttributeValuesParams {
-  value?: string;
-}
 
-// get attribute params
-export interface IGetAttributeParams {
-  id?: number;
-  attributeName?: string;
+// update property basic info params
+export interface IUpdateBasicInfoParams {
+  availableFrom?: string;
+  propertyType?: "Room" | "Flat" | "Seat" | "House" | "Apartment" | "Floor";
+  bedRoom?: number;
+  bathRoom?: number;
+  balcony?: number;
+  floor?: number;
+  gender?: "Male" | "Female" | "Anyone";
+  size?: number;
+  parking?: number;
 }
 
 // insert property content

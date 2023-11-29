@@ -24,29 +24,6 @@ class PropertyModel {
     constructor(client) {
         this.client = client;
     }
-    // insert property basic attribute
-    insertBasicAttribute(params) {
-        return __awaiter(this, void 0, void 0, function* () {
-            if (Array.isArray(params)) {
-                return yield this.client.propertyBasicAttribute.createMany({
-                    data: params,
-                });
-            }
-            else {
-                return yield this.client.propertyBasicAttribute.create({
-                    data: params,
-                });
-            }
-        });
-    }
-    // get property basic attributes
-    getBasicAttribute(params) {
-        return __awaiter(this, void 0, void 0, function* () {
-            return yield this.client.propertyBasicAttribute.findMany({
-                where: params,
-            });
-        });
-    }
     // insert price included
     insertPriceIncluded(params) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -72,21 +49,6 @@ class PropertyModel {
             }
             else {
                 return yield this.client.priceExcluded.create({
-                    data: params,
-                });
-            }
-        });
-    }
-    // insert basic attribute values
-    insertBasicAttributeValues(params) {
-        return __awaiter(this, void 0, void 0, function* () {
-            if (Array.isArray(params)) {
-                return yield this.client.propertyBasicAttributeValue.createMany({
-                    data: params,
-                });
-            }
-            else {
-                return yield this.client.propertyBasicAttributeValue.create({
                     data: params,
                 });
             }
@@ -269,12 +231,15 @@ class PropertyModel {
                     basicInfo: {
                         select: {
                             id: true,
-                            value: true,
-                            attribute: {
-                                select: {
-                                    attributeName: true,
-                                },
-                            },
+                            availableFrom: true,
+                            balcony: true,
+                            bathRoom: true,
+                            bedRoom: true,
+                            floor: true,
+                            gender: true,
+                            parking: true,
+                            propertyType: true,
+                            size: true,
                         },
                     },
                     includedPrice: {
@@ -340,20 +305,20 @@ class PropertyModel {
             });
         });
     }
-    // update basic attribute value
-    updateBasicAttributeValue(payload, id) {
+    // update basic info
+    updateBasicInfo(payload, id) {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield this.client.propertyBasicAttributeValue.update({
+            return yield this.client.propertyBasicInfo.update({
                 data: payload,
                 where: { id },
             });
         });
     }
-    // delete basic attribute vlaue
-    deleteBasicAttributeValue(id) {
+    // insert basic info
+    insertBasicInfo(payload) {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield this.client.propertyBasicAttributeValue.deleteMany({
-                where: { id },
+            return yield this.client.propertyBasicInfo.create({
+                data: payload,
             });
         });
     }
