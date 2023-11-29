@@ -4,10 +4,17 @@ export interface IInsertPropertyBasicAttributeParams {
 }
 
 // insert property basic attribute values
-export interface IInsertBasicAttributeValuesParams {
-  attributeId: number;
-  value: string;
+export interface IInsertBasicInfoParams {
   propertyId: number;
+  availableFrom: string;
+  propertyType: "Room" | "Flat" | "Seat" | "House" | "Apartment" | "Floor";
+  bedRoom?: number;
+  bathRoom?: number;
+  balcony?: number;
+  floor?: number;
+  gender?: "Male" | "Female" | "Anyone";
+  size?: number;
+  parking?: number;
 }
 export interface IUpdateBasicAttributeValuesParams {
   value?: string;

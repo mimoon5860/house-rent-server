@@ -1,3 +1,14 @@
+interface ICreateBasicInfoBody {
+  availableFrom: string;
+  propertyType: "Room" | "Flat" | "Seat" | "House" | "Apartment" | "Floor";
+  bedRoom?: number;
+  bathRoom?: number;
+  balcony?: number;
+  floor?: number;
+  gender?: "Male" | "Female" | "Anyone";
+  size?: number;
+  parking?: number;
+}
 export interface ICreatePropertyBody {
   title: string;
   shortAddress: string;
@@ -10,10 +21,7 @@ export interface ICreatePropertyBody {
   mobileNumber: string;
   alternativeMobileNumber: string;
   priceIncluded: string[];
-  basicInfo: {
-    attributeId: number;
-    value: string;
-  }[];
+  basicInfo: ICreateBasicInfoBody;
   priceExcluded: {
     name: string;
     price: number;

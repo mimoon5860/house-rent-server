@@ -29,9 +29,12 @@ enum CategoryEnum {
 }
 
 enum TypeEnum {
+  House
   Room
   Flat
   Seat
+  Apartment
+  Floor
 }
 
 enum StatusEnum {
@@ -67,6 +70,11 @@ enum OtpType {
   Verify_Admin
 }
 
+enum GenderType {
+  Male
+  Female
+  Anyone
+}
 model User {
   id           Int        @id @default(autoincrement())
   userName     String     @unique
@@ -125,7 +133,7 @@ model Property {
   priceFor      PriceForEnum
   area          Area                          @relation(fields: [areaId], references: [id])
   member        Member                        @relation(fields: [memberId], references: [id])
-  basicInfo     PropertyBasicAttributeValue[]
+  basicInfo     PropertyBasicInfo?
   includedPrice PriceIncluded[]
   excludedPrice PriceExcluded[]
   contents      PropertyContent[]
@@ -163,19 +171,19 @@ model PriceExcluded {
   property   Property     @relation(fields: [propertyId], references: [id])
 }
 
-model PropertyBasicAttribute {
-  id              Int                           @id @default(autoincrement())
-  attributeName   String                        @unique
-  attributeValues PropertyBasicAttributeValue[]
-}
-
-model PropertyBasicAttributeValue {
+model PropertyBasicInfo {
   id          Int                    @id @default(autoincrement())
-  attributeId Int
-  value       String
-  propertyId  Int
+  availableFrom DateTime             @db.Date
+  propertyType  CategoryEnum 
+  bedRoom Int
+  bathRoom Int
+  balcony Int
+  floor Int
+  gender GenderType
+  size Float
+  parking Int
+  propertyId  Int @unique
   property    Property               @relation(fields: [propertyId], references: [id])
-  attribute   PropertyBasicAttribute @relation(fields: [attributeId], references: [id])
 }
 
 model Division {

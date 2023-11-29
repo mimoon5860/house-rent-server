@@ -7,7 +7,7 @@ import {
 } from "../utils/types/member.property.types";
 import {
   IGetProperty,
-  IInsertBasicAttributeValuesParams,
+  IInsertBasicInfoParams,
   IInsertPriceExcludedParams,
   IInsertPriceIncludedParams,
   IInsertPropertyContact,
@@ -46,14 +46,10 @@ class MemberPropertyService extends AbstractServices {
 
       await model.insertPropertyContact(contactBody);
 
-      const attributePayload: IInsertBasicAttributeValuesParams[] =
-        basicInfo.map((item) => {
-          return {
-            propertyId: newProperty.id,
-            attributeId: item.attributeId,
-            value: item.value,
-          };
-        });
+      const attributePayload: IInsertBasicInfoParams = {
+        ...basicInfo,
+        propertyId: newProperty.id,
+      };
 
       await model.insertBasicAttributeValues(attributePayload);
 

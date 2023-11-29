@@ -15,8 +15,17 @@ class MemberPropertyValidator {
 
   // basic info of property schema
   private basicInfoSchema = Joi.object({
-    attributeId: Joi.number().required(),
-    value: Joi.string().required(),
+    availableFrom: Joi.date().required(),
+    propertyType: Joi.string()
+      .valid("Room", "Flat", "Seat", "House", "Apartment", "Floor")
+      .required(),
+    bedRoom: Joi.number(),
+    bathRoom: Joi.number(),
+    balcony: Joi.number(),
+    floor: Joi.number(),
+    gender: Joi.string().valid("Male", "Female", "Anyone"),
+    size: Joi.number(),
+    parking: Joi.number(),
   });
 
   // create property validator
