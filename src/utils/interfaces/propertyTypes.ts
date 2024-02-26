@@ -44,6 +44,12 @@ export interface IInsertPriceIncludedParams {
   name: string;
 }
 
+// insert property features params
+export interface IInsertPropertyFeaturesParams {
+  propertyId: number;
+  name: string;
+}
+
 // insert price excluded params
 export interface IInsertPriceExcludedParams {
   propertyId: number;
@@ -65,11 +71,10 @@ export interface IInsertProperty {
   shortAddress: string;
   areaId: number;
   summary: string;
-  availableFrom: string;
   status?: "Active" | "Expired" | "Draft" | "Inactive";
   category: "Sublet" | "Bachelor" | "Family" | "Office" | "Hostel" | "Shop";
-  price: number;
-  priceFor: "Daily" | "Weekly" | "Monthly" | "Half_Yearly" | "Yearly";
+  rent: number;
+  rentFor: "Daily" | "Weekly" | "Monthly" | "Half_Yearly" | "Yearly";
 }
 
 export interface IUpdateProperty {

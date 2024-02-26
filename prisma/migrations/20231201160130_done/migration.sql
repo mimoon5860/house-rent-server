@@ -55,12 +55,30 @@ CREATE TABLE `Property` (
     `shortAddress` VARCHAR(191) NOT NULL,
     `areaId` INTEGER NOT NULL,
     `summary` TEXT NOT NULL,
-    `availableFrom` DATE NOT NULL,
+    `expiryDate` DATE NULL,
     `isDeleted` BOOLEAN NOT NULL DEFAULT false,
-    `status` ENUM('Active', 'Inactive', 'Expired', 'Draft') NOT NULL DEFAULT 'Active',
+    `status` ENUM('Active', 'Inactive', 'Expired', 'Draft') NOT NULL DEFAULT 'Draft',
     `category` ENUM('Sublet', 'Bachelor', 'Family', 'Office', 'Hostel', 'Shop') NOT NULL,
-    `price` DOUBLE NOT NULL,
-    `priceFor` ENUM('Daily', 'Weekly', 'Monthly', 'Half_Yearly', 'Yearly') NOT NULL,
+    `rent` DOUBLE NOT NULL,
+    `rentFor` ENUM('Daily', 'Weekly', 'Monthly', 'Half_Yearly', 'Yearly') NOT NULL DEFAULT 'Monthly',
+
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `PropertyFeatures` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `propertyId` INTEGER NOT NULL,
+    `name` VARCHAR(191) NOT NULL,
+
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `PropertyContact` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `contact` VARCHAR(191) NOT NULL,
+    `propertyId` INTEGER NOT NULL,
 
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -96,21 +114,22 @@ CREATE TABLE `PriceExcluded` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-CREATE TABLE `PropertyBasicAttribute` (
+CREATE TABLE `PropertyBasicInfo` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
-    `attributeName` VARCHAR(191) NOT NULL,
-
-    UNIQUE INDEX `PropertyBasicAttribute_attributeName_key`(`attributeName`),
-    PRIMARY KEY (`id`)
-) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-
--- CreateTable
-CREATE TABLE `PropertyBasicAttributeValue` (
-    `id` INTEGER NOT NULL AUTO_INCREMENT,
-    `attributeId` INTEGER NOT NULL,
-    `value` VARCHAR(191) NOT NULL,
+    `availableFrom` DATE NOT NULL,
+    `propertyType` ENUM('House', 'Room', 'Flat', 'Seat', 'Apartment', 'Floor') NOT NULL,
+    `noticePeriod` VARCHAR(191) NULL,
+    `minimumTerm` VARCHAR(191) NULL,
+    `bedRoom` INTEGER NULL,
+    `bathRoom` INTEGER NULL,
+    `balcony` INTEGER NULL,
+    `floor` INTEGER NULL,
+    `gender` ENUM('Male', 'Female', 'Anyone') NULL,
+    `size` DOUBLE NULL,
+    `parking` INTEGER NULL,
     `propertyId` INTEGER NOT NULL,
 
+    UNIQUE INDEX `PropertyBasicInfo_propertyId_key`(`propertyId`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -159,6 +178,19 @@ CREATE TABLE `Area` (
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
+-- CreateTable
+CREATE TABLE `EmailOTP` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `email` VARCHAR(191) NOT NULL,
+    `createDate` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `hashedOtp` VARCHAR(191) NOT NULL,
+    `type` ENUM('Reset_Member', 'Reset_Admin', 'Verify_Member', 'Verify_Admin') NOT NULL,
+    `matched` BOOLEAN NOT NULL,
+    `tried` INTEGER NOT NULL,
+
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
 -- AddForeignKey
 ALTER TABLE `UserType` ADD CONSTRAINT `UserType_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `User`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
@@ -178,6 +210,12 @@ ALTER TABLE `Property` ADD CONSTRAINT `Property_areaId_fkey` FOREIGN KEY (`areaI
 ALTER TABLE `Property` ADD CONSTRAINT `Property_memberId_fkey` FOREIGN KEY (`memberId`) REFERENCES `Member`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE `PropertyFeatures` ADD CONSTRAINT `PropertyFeatures_propertyId_fkey` FOREIGN KEY (`propertyId`) REFERENCES `Property`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `PropertyContact` ADD CONSTRAINT `PropertyContact_propertyId_fkey` FOREIGN KEY (`propertyId`) REFERENCES `Property`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE `PropertyContent` ADD CONSTRAINT `PropertyContent_propertyId_fkey` FOREIGN KEY (`propertyId`) REFERENCES `Property`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
@@ -187,10 +225,7 @@ ALTER TABLE `PriceIncluded` ADD CONSTRAINT `PriceIncluded_propertyId_fkey` FOREI
 ALTER TABLE `PriceExcluded` ADD CONSTRAINT `PriceExcluded_propertyId_fkey` FOREIGN KEY (`propertyId`) REFERENCES `Property`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `PropertyBasicAttributeValue` ADD CONSTRAINT `PropertyBasicAttributeValue_propertyId_fkey` FOREIGN KEY (`propertyId`) REFERENCES `Property`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE `PropertyBasicAttributeValue` ADD CONSTRAINT `PropertyBasicAttributeValue_attributeId_fkey` FOREIGN KEY (`attributeId`) REFERENCES `PropertyBasicAttribute`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `PropertyBasicInfo` ADD CONSTRAINT `PropertyBasicInfo_propertyId_fkey` FOREIGN KEY (`propertyId`) REFERENCES `Property`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `District` ADD CONSTRAINT `District_divisionId_fkey` FOREIGN KEY (`divisionId`) REFERENCES `Division`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;

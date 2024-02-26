@@ -10,6 +10,7 @@ import {
   IInsertProperty,
   IInsertPropertyContact,
   IInsertPropertyContentParams,
+  IInsertPropertyFeaturesParams,
   IUpdateBasicInfoParams,
   IUpdatePriceExcludedParams,
   IUpdateProperty,
@@ -19,6 +20,21 @@ class PropertyModel {
   private client: TDB;
   constructor(client: TDB) {
     this.client = client;
+  }
+
+  // insert property features
+  public async insertPropertyFeatures(
+    params: IInsertPropertyFeaturesParams | IInsertPropertyFeaturesParams[]
+  ) {
+    if (Array.isArray(params)) {
+      return await this.client.propertyFeatures.createMany({
+        data: params,
+      });
+    } else {
+      return await this.client.propertyFeatures.create({
+        data: params,
+      });
+    }
   }
 
   // insert price included
@@ -152,7 +168,6 @@ class PropertyModel {
         memberId: true,
         status: true,
         category: true,
-        availableFrom: true,
         shortAddress: true,
         contents: {
           select: {
@@ -209,7 +224,6 @@ class PropertyModel {
         memberId: true,
         status: true,
         category: true,
-        availableFrom: true,
         shortAddress: true,
         contents: {
           select: {
@@ -231,11 +245,10 @@ class PropertyModel {
         memberId: true,
         title: true,
         summary: true,
-        availableFrom: true,
         expiryDate: true,
         status: true,
         category: true,
-        price: true,
+        rentFor: true,
         contact: {
           select: {
             id: true,
@@ -354,6 +367,13 @@ class PropertyModel {
   // delete price included
   public async deletePriceIncluded(id: number) {
     return await this.client.priceIncluded.delete({
+      where: { id },
+    });
+  }
+
+  // delete property features
+  public async deletePropertyFeatures(id: number) {
+    return await this.client.propertyFeatures.delete({
       where: { id },
     });
   }

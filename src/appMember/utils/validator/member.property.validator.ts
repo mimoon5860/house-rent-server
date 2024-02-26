@@ -19,19 +19,18 @@ class MemberPropertyValidator {
     shortAddress: Joi.string().required(),
     summary: Joi.string().required(),
     areaId: Joi.number().required(),
-    availableFrom: Joi.date().min("now").required(),
-    price: Joi.number().required(),
+    rent: Joi.number().required(),
     category: Joi.string()
       .valid("Sublet", "Bachelor", "Family", "Office", "Hostel", "Shop")
       .required(),
-    priceFor: Joi.string()
+    rentFor: Joi.string()
       .valid("Daily", "Weekly", "Monthly", "Half_Yearly", "Yearly")
       .required(),
     priceIncluded: Joi.array().empty().items(this.priceIncludedSchema),
     priceExcluded: Joi.array().empty().items(this.priceExcludedSchema),
     basicInfo: Joi.object()
       .keys({
-        availableFrom: Joi.date().required(),
+        availableFrom: Joi.date().min("now").required(),
         propertyType: Joi.string()
           .valid("Room", "Flat", "Seat", "House", "Apartment", "Floor")
           .required(),
@@ -78,7 +77,7 @@ class MemberPropertyValidator {
 
   // update property excluded added part validator schema
 
-  public updatePriceExludedAddedSchemah = Joi.object({
+  public updatePriceExludedAddedSchema = Joi.object({
     name: Joi.string().optional(),
     price: Joi.number().optional(),
     priceFor: Joi.string()
@@ -86,7 +85,7 @@ class MemberPropertyValidator {
       .optional(),
   });
   // update property excluded updated part validator schema
-  public updatePriceExludedUpdatedSchemah = Joi.object({
+  public updatePriceExludedUpdatedSchema = Joi.object({
     id: Joi.number().required,
     name: Joi.string().optional(),
     price: Joi.number().optional(),
@@ -96,17 +95,17 @@ class MemberPropertyValidator {
   });
 
   // update property validator schema
-  public updatePropertySchemah = Joi.object({
+  public updatePropertySchema = Joi.object({
     title: Joi.string().optional(),
     shortAddress: Joi.string().optional(),
     summary: Joi.string().optional(),
     areaId: Joi.number().optional(),
     availableFrom: Joi.date().min("now").optional(),
-    price: Joi.number().optional(),
+    rent: Joi.number().optional(),
     category: Joi.string()
       .valid("Sublet", "Bachelor", "Family", "Office", "Hostel", "Shop")
       .optional(),
-    priceFor: Joi.string()
+    rentFor: Joi.string()
       .valid("Daily", "Weekly", "Monthly", "Half_Yearly", "Yearly")
       .optional(),
     priceIncluded: Joi.object({
@@ -114,10 +113,10 @@ class MemberPropertyValidator {
       deleted: Joi.array().items(Joi.number().required()).optional(),
     }).optional(),
     priceExluded: Joi.object({
-      added: Joi.array().items(this.updatePriceExludedAddedSchemah).optional(),
+      added: Joi.array().items(this.updatePriceExludedAddedSchema).optional(),
       deleted: Joi.array().items(Joi.number().required()).optional(),
       updated: Joi.array()
-        .items(this.updatePriceExludedUpdatedSchemah)
+        .items(this.updatePriceExludedUpdatedSchema)
         .optional(),
     }).optional(),
     basicInfo: Joi.object()

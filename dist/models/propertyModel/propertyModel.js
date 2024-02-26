@@ -24,6 +24,21 @@ class PropertyModel {
     constructor(client) {
         this.client = client;
     }
+    // insert property features
+    insertPropertyFeatures(params) {
+        return __awaiter(this, void 0, void 0, function* () {
+            if (Array.isArray(params)) {
+                return yield this.client.propertyFeatures.createMany({
+                    data: params,
+                });
+            }
+            else {
+                return yield this.client.propertyFeatures.create({
+                    data: params,
+                });
+            }
+        });
+    }
     // insert price included
     insertPriceIncluded(params) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -138,7 +153,6 @@ class PropertyModel {
                     memberId: true,
                     status: true,
                     category: true,
-                    availableFrom: true,
                     shortAddress: true,
                     contents: {
                         select: {
@@ -194,7 +208,6 @@ class PropertyModel {
                     memberId: true,
                     status: true,
                     category: true,
-                    availableFrom: true,
                     shortAddress: true,
                     contents: {
                         select: {
@@ -217,11 +230,10 @@ class PropertyModel {
                     memberId: true,
                     title: true,
                     summary: true,
-                    availableFrom: true,
                     expiryDate: true,
                     status: true,
                     category: true,
-                    price: true,
+                    rentFor: true,
                     contact: {
                         select: {
                             id: true,
@@ -343,6 +355,14 @@ class PropertyModel {
     deletePriceIncluded(id) {
         return __awaiter(this, void 0, void 0, function* () {
             return yield this.client.priceIncluded.delete({
+                where: { id },
+            });
+        });
+    }
+    // delete property features
+    deletePropertyFeatures(id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return yield this.client.propertyFeatures.delete({
                 where: { id },
             });
         });

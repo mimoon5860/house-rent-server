@@ -15,9 +15,8 @@ export interface ICreatePropertyBody {
   shortAddress: string;
   summary: string;
   areaId: number;
-  availableFrom: string;
-  price: number;
-  priceFor: "Daily" | "Weekly" | "Monthly" | "Half_Yearly" | "Yearly";
+  rent: number;
+  rentFor: "Daily" | "Weekly" | "Monthly" | "Half_Yearly" | "Yearly";
   category: "Sublet" | "Bachelor" | "Family" | "Office" | "Hostel" | "Shop";
   mobileNumber: string;
   alternativeMobileNumber: string;
@@ -48,9 +47,9 @@ export interface IUpdatePropertyBody {
   summary?: string;
   areaId?: number;
   availableFrom?: string;
-  price?: number;
+  rent?: number;
   category?: "Sublet" | "Bachelor" | "Family" | "Office" | "Hostel" | "Shop";
-  priceFor?: "Daily" | "Weekly" | "Monthly" | "Half_Yearly" | "Yearly";
+  rentFor?: "Daily" | "Weekly" | "Monthly" | "Half_Yearly" | "Yearly";
   priceIncluded?: { added: string[]; deleted: number[] };
   priceExluded?: {
     added?: {

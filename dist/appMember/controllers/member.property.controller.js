@@ -63,7 +63,7 @@ class MemberPropertyController extends abstract_controller_1.default {
         }));
         // update property controller
         this.updateProperty = this.asyncWrapper.wrap({
-            bodySchema: this.validator.updatePropertySchemah,
+            bodySchema: this.validator.updatePropertySchema,
             parmSchema: this.validator.paramsIdValidatorSchema,
         }, (req, res) => __awaiter(this, void 0, void 0, function* () {
             const _e = yield this.services.updateProperty(req), { code } = _e, rest = __rest(_e, ["code"]);

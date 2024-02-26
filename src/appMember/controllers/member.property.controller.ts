@@ -63,7 +63,7 @@ class MemberPropertyController extends AbstractController {
   // update property controller
   public updateProperty = this.asyncWrapper.wrap(
     {
-      bodySchema: this.validator.updatePropertySchemah,
+      bodySchema: this.validator.updatePropertySchema,
       parmSchema: this.validator.paramsIdValidatorSchema,
     },
     async (req: Request, res: Response) => {

@@ -22,19 +22,18 @@ class MemberPropertyValidator {
             shortAddress: joi_1.default.string().required(),
             summary: joi_1.default.string().required(),
             areaId: joi_1.default.number().required(),
-            availableFrom: joi_1.default.date().min("now").required(),
-            price: joi_1.default.number().required(),
+            rent: joi_1.default.number().required(),
             category: joi_1.default.string()
                 .valid("Sublet", "Bachelor", "Family", "Office", "Hostel", "Shop")
                 .required(),
-            priceFor: joi_1.default.string()
+            rentFor: joi_1.default.string()
                 .valid("Daily", "Weekly", "Monthly", "Half_Yearly", "Yearly")
                 .required(),
             priceIncluded: joi_1.default.array().empty().items(this.priceIncludedSchema),
             priceExcluded: joi_1.default.array().empty().items(this.priceExcludedSchema),
             basicInfo: joi_1.default.object()
                 .keys({
-                availableFrom: joi_1.default.date().required(),
+                availableFrom: joi_1.default.date().min("now").required(),
                 propertyType: joi_1.default.string()
                     .valid("Room", "Flat", "Seat", "House", "Apartment", "Floor")
                     .required(),
@@ -76,7 +75,7 @@ class MemberPropertyValidator {
             division: joi_1.default.number().integer().positive().optional(),
         });
         // update property excluded added part validator schema
-        this.updatePriceExludedAddedSchemah = joi_1.default.object({
+        this.updatePriceExludedAddedSchema = joi_1.default.object({
             name: joi_1.default.string().optional(),
             price: joi_1.default.number().optional(),
             priceFor: joi_1.default.string()
@@ -84,7 +83,7 @@ class MemberPropertyValidator {
                 .optional(),
         });
         // update property excluded updated part validator schema
-        this.updatePriceExludedUpdatedSchemah = joi_1.default.object({
+        this.updatePriceExludedUpdatedSchema = joi_1.default.object({
             id: joi_1.default.number().required,
             name: joi_1.default.string().optional(),
             price: joi_1.default.number().optional(),
@@ -93,17 +92,17 @@ class MemberPropertyValidator {
                 .optional(),
         });
         // update property validator schema
-        this.updatePropertySchemah = joi_1.default.object({
+        this.updatePropertySchema = joi_1.default.object({
             title: joi_1.default.string().optional(),
             shortAddress: joi_1.default.string().optional(),
             summary: joi_1.default.string().optional(),
             areaId: joi_1.default.number().optional(),
             availableFrom: joi_1.default.date().min("now").optional(),
-            price: joi_1.default.number().optional(),
+            rent: joi_1.default.number().optional(),
             category: joi_1.default.string()
                 .valid("Sublet", "Bachelor", "Family", "Office", "Hostel", "Shop")
                 .optional(),
-            priceFor: joi_1.default.string()
+            rentFor: joi_1.default.string()
                 .valid("Daily", "Weekly", "Monthly", "Half_Yearly", "Yearly")
                 .optional(),
             priceIncluded: joi_1.default.object({
@@ -111,10 +110,10 @@ class MemberPropertyValidator {
                 deleted: joi_1.default.array().items(joi_1.default.number().required()).optional(),
             }).optional(),
             priceExluded: joi_1.default.object({
-                added: joi_1.default.array().items(this.updatePriceExludedAddedSchemah).optional(),
+                added: joi_1.default.array().items(this.updatePriceExludedAddedSchema).optional(),
                 deleted: joi_1.default.array().items(joi_1.default.number().required()).optional(),
                 updated: joi_1.default.array()
-                    .items(this.updatePriceExludedUpdatedSchemah)
+                    .items(this.updatePriceExludedUpdatedSchema)
                     .optional(),
             }).optional(),
             basicInfo: joi_1.default.object()
